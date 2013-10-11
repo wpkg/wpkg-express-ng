@@ -33,8 +33,15 @@
 			break;
 		case CHECK_TYPE_UNINSTALL:
 			$width = 136;
-			$showValue = false;
+			$showValue = true;
 			$pathLabel = "Add/Remove Name:";
+			if ($checkTypeCond == CHECK_CONDITION_UNINSTALL_EXISTS)
+				$showValue = false;
+			break;
+		case CHECK_TYPE_HOST:
+			$width = 136;
+			$showValue = true;
+			$showPath = false;
 			break;
 		case CHECK_TYPE_REGISTRY:
 			if ($checkTypeCond == CHECK_CONDITION_REGISTRY_EXISTS)
@@ -67,7 +74,7 @@
 
 <div class="inputwrap"><label for="PackageCheckType" title="<?php echo TOOLTIP_PACKAGECHECK_TYPE; ?>"><span class="required">*</span>Type:</label>
 	<?php if (isset($logicalChecks)): ?>
-		<?php echo $form->input('type', array('label' => false, 'selected' => $checkType, 'options' => array(CHECK_TYPE_REGISTRY => 'Registry', CHECK_TYPE_FILE => 'File', CHECK_TYPE_UNINSTALL => 'Uninstall', CHECK_TYPE_LOGICAL => 'Logical', CHECK_TYPE_EXECUTE => 'Execute'), 'div' => false, 'onchange' => 'window.location.href = "' . HtmlHelper::url("add/check/$pkgId") . '/type:" + document.getElementById("PackageCheckType").value;')) ?>
+		<?php echo $form->input('type', array('label' => false, 'selected' => $checkType, 'options' => array(CHECK_TYPE_REGISTRY => 'Registry', CHECK_TYPE_FILE => 'File', CHECK_TYPE_UNINSTALL => 'Uninstall',CHECK_TYPE_HOST => 'Host', CHECK_TYPE_LOGICAL => 'Logical', CHECK_TYPE_EXECUTE => 'Execute'), 'div' => false, 'onchange' => 'window.location.href = "' . HtmlHelper::url("add/check/$pkgId") . '/type:" + document.getElementById("PackageCheckType").value;')) ?>
 	<?php else: ?>
 		Logical<?php echo $form->hidden('type', array('label' => false, 'selected' => $checkType, 'options' => array(CHECK_TYPE_LOGICAL => 'Logical'), 'div' => false)) ?>
 	<?php endif; ?>

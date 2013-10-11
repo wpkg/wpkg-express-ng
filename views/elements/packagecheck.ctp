@@ -46,7 +46,26 @@ switch ($PackageCheck['type']) {
 		}
 		break;
 	case CHECK_TYPE_UNINSTALL:
-		$out .= "Uninstall Exists For \"" . $PackageCheck['path'] . "\"";
+		$out .= "Uninstall ";
+		switch ($PackageCheck['condition']) {
+			case CHECK_CONDITION_UNINSTALL_EXISTS: $out .= " Exists ".$PackageCheck['path']; break;
+			case CHECK_CONDITION_UNINSTALL_VERSION_SMALLER_THAN: $out .= $PackageCheck['path']." < " . $PackageCheck['value']; break;
+			case CHECK_CONDITION_UNINSTALL_LESS_THAN_OR_EQUAL_TO: $out .= $PackageCheck['path']." &le; " . $PackageCheck['value']; break;
+			case CHECK_CONDITION_UNINSTALL_EQUAL_TO: $out .= $PackageCheck['path']." = " . $PackageCheck['value']; break;
+			case CHECK_CONDITION_UNINSTALL_GREATER_THAN: $out .= $PackageCheck['path']." > " . $PackageCheck['value']; break;
+			case CHECK_CONDITION_UNINSTALL_GREATER_THAN_OR_EQUAL_TO: $out .= $PackageCheck['path']." &ge; " . $PackageCheck['value']; break;
+			default: $out .= "Unknown";
+		}
+		break;
+	case CHECK_TYPE_HOST:
+		$out .= "Host ";
+		switch ($PackageCheck['condition']) {
+			case CHECK_CONDITION_HOST_HOSTNAME: $out .= " Hostname ". $PackageCheck['value']; break;
+			case CHECK_CONDITION_HOST_OS: $out .= " OS ". $PackageCheck['value']; break;
+			case CHECK_CONDITION_HOST_ARCHITECTURE: $out .= " Architecture ". $PackageCheck['value']; break;
+			case CHECK_CONDITION_HOST_ENVIRONMENT: $out .= " Environment ". $PackageCheck['value']; break;
+			default: $out .= "Unknown";
+		}
 		break;
 	case CHECK_TYPE_EXECUTE:
 		$out .= "Execute \"" . $PackageCheck['path'] . "\" and ensure the returned exit code ";
