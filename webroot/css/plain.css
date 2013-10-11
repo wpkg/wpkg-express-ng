@@ -550,3 +550,17 @@
       color: red;
       padding-left: 10px;
     }
+
+/* Change packages selection in profiles view */
+
+.profilesselect, .hostsselect {
+	margin-left: 15px;
+}
+
+.profilesselect label, .hostsselect label {
+	float: none;
+}
+
+.submit input {
+	margin-left: 15px;
+}
