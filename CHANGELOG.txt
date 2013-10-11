@@ -1,0 +1,68 @@
+v1.0-r12
+========
+Fixes:	- When importing, Profiles and dependent Packages that are associated with Packages that are upgraded, lose those associations after Package upgrade
+Enhancements:	- Web authentication username and password can be changed in the Admin section
+		- Formatted XML output can now be toggled in the Admin section
+		- Exporting of disabled items as XML comments can now be toggled in the Admin section
+		- Individual items can once again be exported by attaching ".xml" to the item's ID in the URL (i.e. http://myserver/wpkgEXpress/packages/view/7.xml)
+
+v1.0-r11
+========
+Fixes:	- Packages' revision and priority fields do not default to zero when left blank
+	- The Profile edit form and Host edit form incorrectly show a text input field for the "Enabled" attribute instead of a checkbox
+Enhancements:	- Unicode characters are now accepted in fields that were previously validated using regexps with only the English alphabet
+			* Specifically, this affects the Package ID and Profile ID fields
+
+v1.0-r10
+=======
+Fixes:	- missingController error when session has timed out and the logout link is clicked
+	- Warnings and other less critical messages are not being shown during XML import
+Enhancements:	- For Packages imported which already exist in the database (by WPKG package id), if the imported Package has a higher revision than the one in the database, the Package in the database will be overwritten
+		- Imported Packages, Profiles, and Hosts (and their dependencies) which did not have any validation errors will be saved, when some others did have errors. The total successfully saved is now shown.
+
+v1.0-r9
+=======
+Fixes:	- Associated packages for profiles and associated profiles for hosts were not being saved correctly when using the multi-select list to remove associations
+	- Deleting an associated package for a profile attempts to perform a redirect, which causes a missing controller error
+
+v1.0-r8
+=======
+Fixes:	- Blank page can occur during installation
+	- XML Packages import not correctly importing Package actions
+	- XML Packages export generates malformed XML attribute values
+	- HTML quote entities are not decoded on XML import (only necessary to decode when importing an export from a version prior to 1.0-r8)
+Enhancements:	- Switched from CakePHP's XML classes to PHP's SimpleXML classes for XML importing purposes
+
+v1.0-r7
+=======
+Fixes:	- Search form on top not showing up initially right after login
+	- XML import issues where some nodes are completely missing or mangled, due to CakePHP XML class bug
+	- Broken Package action commands during XML export. Fix does the following:
+		* If a Package action command contains double-quotes, the XML attribute value will be wrapped in single-quotes and any single-quotes in the command will be converted to the appropriate HTML entity
+		* If a Package action command does not contain double-quotes, the XML attribute value will be wrapped in double-quotes and single-quotes are left alone
+	- SQLite v2.x (driver name "sqlite") incompatibility
+	- Incorrect XML node names for children of logical Package checks
+Enhancements:	- (Beta) SQLite v3.x (driver name "sqlite3") compatibility
+
+v1.0-r6
+=======
+Fixes:	- Infinite redirect when visiting the root when installation has not yet occurred
+	- XML Feed access username and password required during installation/in Admin section even if the protect XML option set to No
+	- Double quotes in Package action commands not replaced with single quotes or escaped during XML output
+	- Adding a host before any Profiles have been defined results in an empty Main Profile selection list
+	- Ability to delete a Profile which is currently the Main Profile of a Host
+Enhancements:	- SSL is now disabled by default and is now toggleable in the Admin section
+		- Updated CakePHP core to latest stable version (1.2.5)
+		- Any field (besides Name) sorting on Packages list page will have Name as secondary sort
+		- Profiles' associated Packages lists are now explicitly sorted by Package Name ascending
+		- Profile dependencies are now explicitly sorted by Profile ID ascending
+		- Packages' list of Profiles that depending on it in is now explicitly sorted by Profile ID ascending
+		- Packages, Profiles, Hosts, or all types can be searched using the search form at the top of every page
+			* Not all attributes are searched, mostly just (where applicable) the Name, Id, and Notes attributes)
+
+v1.0-r5
+=======
+Fixes:	- Error when importing exit codes with no reboot attribute defined
+	- Error when importing exit codes with a reboot attribute of 'any'
+	- Exit code import errors were not displaying properly
+	- "Execute Once" package action execute attribute not saved properly due to incorrect SQL 'execute' field definition

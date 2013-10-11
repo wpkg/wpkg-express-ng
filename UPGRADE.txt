@@ -1,0 +1,10 @@
+Upgrading
+=========
+1. Backup the following files from your existing installation:
+	- config/core.php
+	- config/database.php
+	- config/wpkgExpress.php
+2. Overwrite the files from your existing installation with the files contained in this distribution
+3. Restore your backed up files, overwriting the ones from this distribution
+*4. Finally, if upgrading from r11 or older, navigate to the following address in your browser: http://your-server/where-wpkgExpress-is-installed/upgrade_pre-r12.php
+   This will upgrade the wpkgExpress configuration file to the new format used by r12 onwards.

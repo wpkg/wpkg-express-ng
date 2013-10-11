@@ -1,0 +1,552 @@
+/*
+    - original css -
+    name:   cloudyDay.css
+    author: Pat Heard (fullahead.org)
+    date:   2005/04/30
+
+    - modifications -
+    name:   plain.css
+    author: Brian White
+    date:   2008/12/19
+*/
+
+
+
+/* -- Site container definition -- */
+
+
+
+    body {
+      font: 0.8em Arial, Helvetica, sans-serif;
+      color: #444444;
+      background-color: #FFFFFF;
+      margin: 0;
+    }
+
+    body a, a:visited {
+      color: #0066CC;
+      text-decoration: none;
+    }
+
+    body a:hover, a:active {
+      color: #CC0000;
+    }
+
+    #siteBox {
+      width: 98%;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+    
+    
+    
+/* -- Header definitions -- */    
+    
+    
+
+    #headerBox {
+      float: left;
+      width: 100%;
+      height: 50px;
+      margin-bottom: 7px !important;
+      margin-bottom: 0px;
+      font-weight: bold;
+    }
+
+    #headerLeft {
+      padding-top: 12px;
+      font-size: 2.0em;
+      text-align: left;
+      float: left;
+      width: 170px; /*29%;*/
+      height: 43px;
+    }
+
+    #headerRight {
+      padding-top: 29px;
+      padding-bottom: 3px;
+      font-size: 1.3em;
+      /*float: right;*/
+      /*width: 70%;*/
+      height: 0px;
+      text-align: right;
+    }
+
+
+
+/* -- Header link bar definitions -- */
+
+
+
+
+    #headerRight a {
+      padding-left: 20px;
+      text-decoration: none;
+      /*color: #999999;*/
+      color: #0066CC;
+    }
+
+    #headerRight a:hover {
+      /*color: #444444;*/
+      color: #CC0000;
+      /*border-bottom: 2px solid #CCCCCC;*/
+    }
+
+    #headerRight a.navLinkSelected {
+      margin-left: 20px;
+      padding-left: 0;
+      border-bottom: 2px solid black;
+    }
+
+    #headerRight a.packages:hover {
+      margin-left: 0;
+      padding-left: 20px;
+      background: url(../img/packages.png) no-repeat left center;
+    }
+
+    #headerRight a.profiles:hover {
+      margin-left: 0;
+      padding-left: 20px;
+      background: url(../img/profiles.png) no-repeat left center;
+    }
+
+    #headerRight a.hosts:hover {
+      margin-left: 0;
+      padding-left: 20px;
+      background: url(../img/hosts.png) no-repeat left center;
+    }
+
+    #headerRight a.admin:hover {
+      margin-left: 0;
+      padding-left: 20px;
+      background: url(../img/admin.png) no-repeat left center;
+    }
+	
+	#headerRight a.logout:hover {
+      margin-left: 0;
+      padding-left: 20px;
+      background: url(../img/logout.png) no-repeat left center;
+    }
+
+
+
+/* -- Footer definitions -- */
+
+
+
+    #footerBox {
+      float: left;
+      width: 100%;
+      height: 25px;
+      font-size: 0.8em;
+      color: #999999;
+      border-top: 1px solid #D1D1D1;
+      margin-top: 15px;
+    }
+
+    #footerLeft {
+      float: left;
+      width: 50%;
+      text-align: left;
+          }
+
+    #footerRight {
+      float: right;
+      width: 50%;
+      text-align: right;      
+    }
+
+
+
+/* -- Content area & layout definitions -- */
+
+
+
+
+    #content {
+      text-align: left;
+      line-height: 160%;
+    }
+
+    .bar {
+      display: block;
+      clear: both;
+      font-size: 1.0em;
+      /*margin-bottom: 1.0em;*/
+      border-top: 1px solid #444444;
+      border-bottom: 1px solid #444444;
+      background: url(../img/news_bg.gif) repeat left bottom;
+    }
+
+    #content h2 {
+      z-index: 3;
+      position: relative;
+      left: 15px;
+      color: #444444;
+      background-color: white;
+      padding: 2px 5px;
+      /*display: inline;*/
+      display: block;
+      clear: both;
+      float: left;
+
+      font-family: Georgia, "Times New Roman", Times, serif;
+      font-size: 1.3em;
+      font-weight: bold;
+      /*border: 1px solid black;*/
+      border-top: 2px solid #CCCCCC;
+      border-left: 2px solid #CCCCCC;
+      border-bottom: 2px solid black;
+      border-right: 2px solid black;
+    }
+
+    #content hr.hbar {
+      z-index: 2;
+      position: relative;
+      //top: -17px;
+      top: -28px;
+      clear: both;
+
+      color: white;
+      height: 0px;
+      border: 0;
+      border-bottom: 1px solid black;
+    }
+
+    #content div.paging div.disabled {
+      //display: inline;
+      display: none;
+    }
+
+    .variable-equals { font-weight: bold; }
+    .variable-error-unrecoverable { padding-top: 10px; font-weight: bold; font-size: 1.8em; text-align: center; }
+
+
+
+/* -- Layout class definitions -- */
+
+
+    .subHeading {
+      display: block;
+      clear: both;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+    
+    .noDisplay  {
+      display: none;
+    }
+
+    .bugFix {
+      height: 1px;
+    }
+
+    .bigRightChar, .bigLeftChar {
+      font-size: 5.0em;  
+    }
+
+    .bigRightChar {
+      float: right;
+      width: 11%;
+      text-align: left;
+    }
+
+    .bigLeftChar {
+      float: left;
+      width: 10%;
+      text-align: right;          
+    }
+    
+    .center {
+      text-align: center;
+    }
+    
+    .verticalSpacer {
+      height: 1.3em;
+    }
+
+    .small {
+      margin-left: 20px;
+      color: #666666;
+      font-size: 7pt;
+    }
+
+    .endOfRow {
+      clear: left;
+    }
+
+    #stats-container {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      /*text-align: center;*/
+    }
+
+    .statsblockLeft, .statsblockRight {
+      margin: 10px;
+      width: 45%;
+    }
+
+    .statsblockLeft {
+      float: left;
+    }
+
+    .statsblockRight {
+      float: right;
+    }
+	
+	.messagesList {
+		margin-left: 20px;
+		margin-right: auto;
+		text-align: left;
+	}
+	
+	.notes {
+	  float: left;
+	}
+	
+	.date {
+	  display: inline;
+	}
+	
+	.installerHeader {
+		font-size: 1em;
+		font-weight: normal;
+		padding-left: 5px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		border-bottom: 2px black solid;
+		border-left: 2px black solid;
+		clear: both;
+	}
+    
+    
+    
+/* -- Element class definitions -- */    
+    
+    
+    
+    acronym {
+      cursor: help;
+      background-color: #FFFFFF;
+      border: 1px solid #D2D2D2;      
+    }
+    
+    ul {
+      margin-bottom: 5px;
+      margin-top: 0px;
+      float: left;
+      padding-left: 0em;
+	  margin-left: 20px;
+      /*margin-left: 2.0em;
+      /padding-left: 2.0em;*/
+      list-style-image: url(../img/bullet.gif);
+    }
+	
+	.messagesList ul, .messagesList li:hover, .messagesList li.hover, ul.reg, ul.reg li:hover, ul.reg li.hover {
+		float: none;
+		list-style-image: none;
+	}
+	
+	ol.reg {
+		float: left;
+		margin: 0px;
+		padding-left: 20px;
+	}
+	
+	.messagesList li {
+		clear: both;
+	}
+
+    ul li {
+      behavior: url('IEFixes.htc');
+      clear: both;
+    }
+
+    ul li.hover, ul li:hover {
+      list-style-image: url(../img/bullet_on.gif);
+    }
+	
+	ol li {
+	  behavior: none;
+	  clear: both;
+	}
+	
+	ol li.hover, ol li:hover {
+	  list-style-image: none;
+	}
+    
+    p {
+      margin: 15px 0 15px 0;
+    }
+
+    img {
+      border: 0;
+    }
+
+
+/* -- Image class definitions -- */
+
+
+
+    .imgBlock {
+      float: left;
+      width: 75%;
+      text-align: center;
+      padding-left: 10px;
+      margin-bottom: 1.0em;
+    }
+
+    .imgBlock .imgThree {
+      padding: 0 2% 0 2%;
+    }
+
+    .imgLeft {
+      float: left;
+      padding: 5px;      
+    }
+    
+    .imgRight {
+      float: right;
+      padding: 5px;      
+    }    
+
+    .imgText {
+      display: block;
+      font-size: 0.7em;
+    }
+
+
+
+/* -- Form element class definitions -- */
+
+
+    table {  
+      width: 100%;   
+      border: 1px solid #003d4c; 
+      color:#333; 
+      background-color: #fff;
+      clear:both;    
+      padding: 0;
+      margin: 0 0 2em 0;
+      white-space: normal;
+    }
+
+    th {
+      background-color: #ccc;
+      border-top: 1px solid #fff;
+      border-left: 1px solid #fff;
+      border-right: 1px solid #003d4c;
+      border-bottom: 1px solid #003d4c;
+      text-align: center;
+      padding:1px;
+    }
+
+    th img {
+      vertical-align: middle; 
+      margin-right: 7px;
+    }
+    
+    tr td {
+      border-right: 1px solid #ccc;
+      padding:4px 4px;
+      vertical-align:top;
+      text-align: center;
+    }
+
+    tr.altRow td {
+      background: #f4f4f4;
+    }
+
+    tr.disabled {
+      background-color: #bbbbbb;
+    }
+
+
+
+/* -- Form element class definitions -- */
+
+    fieldset {
+      display: block;
+      width: 98%;
+    }
+	fieldset.xmlsettings  label{
+	  width: 180px;
+	}
+
+    legend {
+      color: #444444;
+      background-color: white;
+      padding: 2px 5px;
+      font-family: Georgia, "Times New Roman", Times, serif;
+      font-size: 1.3em;
+      font-weight: bold;
+      border-top: 2px solid #CCCCCC;
+      border-left: 2px solid #CCCCCC;
+      border-bottom: 2px solid black;
+      border-right: 2px solid black;
+    }
+
+    .required {
+      display: inline;
+      font-weight: bold;
+      /*color: red;*/
+      padding-right: 5px;
+    }
+
+    label {
+      float: left;
+      width: 70px;
+      text-align: right;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+
+    label.wider {
+      width: 141px;
+    }
+
+    .input, select, textarea {
+      /*font-size: 0.70em;*/
+      border: 1px solid #D2D2D2;
+      background-color: #FFFFFF;
+    }
+
+    .input:focus, textarea:focus {
+      color: #444444;
+      border: 1px solid #999999;
+    }
+
+    .inputwrap {margin-bottom: 5px; clear: both;}
+    #submit {margin-top: 10px; border-color: black; background-color: #cccccc;}
+
+
+
+/* -- CakePHP-specific class definitions -- */
+
+	.highlight {
+		background: #ff0;
+	}
+
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 12pt;
+      font-weight: bold;
+      background-color: #CCCCCC;
+      color: #000000;
+    }
+
+    .form-error {
+      border: 2px solid red !important;
+    }
+
+    .error-message {
+      display: inline;
+      font-weight: bold;
+      color: red;
+      padding-left: 10px;
+    }
