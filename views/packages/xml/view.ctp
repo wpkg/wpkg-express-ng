@@ -257,6 +257,8 @@ if (isset($package['PackageAction'])) {
 					case EXITCODE_REBOOT_POSTPONED:
 						$reboot = "postponed";
 						break;
+				default:
+					$reboot = Null;
 				}
 				$exitcode_attribs = array('_name_' => 'exit', 'code' => $exitcode['code']);
 				if (isset($reboot))
