@@ -173,6 +173,7 @@ if  (isset($package['PackageCheck'])) {
 	
 	// A bit of a crude hack for now, something funky must have changed with CakePHP's XML handling in 1.2.5 final :-(
 	$XML_Checks = str_replace("<condition type=\"", "<check type=\"", $XML_Checks);
+	$XML_Checks = str_replace("</condition>", "</check>", $XML_Checks);
 }
 if (isset($package['PackageAction'])) {
 	$actions = array();
