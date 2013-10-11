@@ -455,6 +455,10 @@
       text-align: center;
     }
 
+	tr:hover {
+		background: #f4f4f4;
+	}
+
     tr.altRow td {
       background: #f4f4f4;
     }
