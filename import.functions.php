@@ -559,7 +559,7 @@ class WPKGImporter {
 			$messages = array_merge_recursive($messages, $this->_validateProfilePackages($packages, $profile['id_text']));
 			
 			if (!empty($packages)) {
-				$profile['Package'] = $packages;
+				$profile['package'] = $packages;
 				unset($packages);
 			}
 		}
@@ -770,7 +770,7 @@ class WPKGImporter {
 			$messages = array_merge_recursive($messages, $this->_validateHostProfiles($profiles, $host['name']));
 			
 			if (!empty($profiles)) {
-				$host['Profile'] = $profiles;
+				$host['profile'] = $profiles;
 				unset($profiles);
 			}
 		}
