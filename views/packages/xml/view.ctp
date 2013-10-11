@@ -141,10 +141,52 @@ if  (isset($package['PackageCheck'])) {
 				$value = $check['value'];
 				break;
 			case CHECK_TYPE_UNINSTALL:
-				$type = "uninstall";
-				$condition = "exists";
-				$path = $check['path'];
-				break;
+                               $type = "uninstall";
+                               switch ($check['condition']) {
+                                       case CHECK_CONDITION_UNINSTALL_EXISTS:
+                                               $condition = "exists";
+                                               break;
+                                       case CHECK_CONDITION_UNINSTALL_VERSION_SMALLER_THAN:
+                                               $condition = "versionsmallerthan";
+                                               $value = $check['value'];
+                                               break;
+                                       case CHECK_CONDITION_UNINSTALL_LESS_THAN_OR_EQUAL_TO:
+                                               $condition = "versionlessorequal";
+                                               $value = $check['value'];
+                                               break;
+                                       case CHECK_CONDITION_UNINSTALL_EQUAL_TO:
+                                               $condition = "versionequalto";
+                                               $value = $check['value'];
+                                               break;
+                                       case CHECK_CONDITION_UNINSTALL_GREATER_THAN:
+                                               $condition = "versiongreaterthan";
+                                               $value = $check['value'];
+                                               break;
+                                       case CHECK_CONDITION_UNINSTALL_GREATER_THAN_OR_EQUAL_TO:
+                                               $condition = "versiongreaterorequal";
+                                               $value = $check['value'];
+                                               break;
+                               }
+                               $path = $check['path'];
+                               break;
+                       case CHECK_TYPE_HOST:
+                               $type = "host";
+                               switch ($check['condition']) {
+                                       case CHECK_CONDITION_HOST_HOSTNAME:
+                                               $condition = "hostname";
+                                               break;
+                                       case CHECK_CONDITION_HOST_OS:
+                                               $condition = "os";
+                                               break;
+                                       case CHECK_CONDITION_HOST_ARCHITECTURE:
+                                               $condition = "architecture";
+                                               break;
+                                       case CHECK_CONDITION_HOST_ENVIRONMENT:
+                                               $condition = "environment";
+                                               break;
+                               }
+                               $value = $check['value'];
+                               break;
 			default:
 				$type = "unknown";
 				$condition = "unknown";
