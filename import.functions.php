@@ -489,7 +489,7 @@ class WPKGImporter {
 					$messages['Information'][$package['Package']['id_text']][] = "The package was upgraded from revision {$existing['Package']['revision']} to {$package['Package']['revision']}";
 				} else {
 					$this->pkgNotUpd[] = $package['Package']['id_text'];
-					$messages['Warnings'][$package['Package']['id_text']][] = "Found a pre-existing package (of the same ID) in the database with a higher revision than the imported one. Skipping.";
+					$messages['Warnings'][$package['Package']['id_text']][] = "A pre-existing package (of the same ID) is in the database which has a equal or higher revision than the imported one. Skipping.";
 				}
 			}
 			if (!empty($errors))
