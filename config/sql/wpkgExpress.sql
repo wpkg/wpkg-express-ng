@@ -27,7 +27,8 @@ CREATE TABLE `hosts` (
 	`created` datetime DEFAULT NULL,
 	`modified` datetime DEFAULT NULL,
 	`mainprofile_id` int(10) NOT NULL,
-	`position` int(5) DEFAULT 0 NOT NULL,	PRIMARY KEY  (`id`));
+	`position` int(5) DEFAULT 0 NOT NULL,	PRIMARY KEY  (`id`),
+	INDEX (`enabled`));
 
 CREATE TABLE `hosts_profiles` (
 	`id` int(10) NOT NULL AUTO_INCREMENT,
