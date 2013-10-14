@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS `variables`;
 CREATE TABLE `exit_codes` (
 	`id` int(10) NOT NULL AUTO_INCREMENT,
 	`package_action_id` int(10) NOT NULL,
-	`code` int(11) NOT NULL,
+	`code` varchar(11) NOT NULL,
 	`reboot` int(4) NOT NULL,	PRIMARY KEY  (`id`));
 
 CREATE TABLE `hosts` (
