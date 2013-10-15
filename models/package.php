@@ -42,10 +42,10 @@ class Package extends AppModel {
 			)
 		),
 		'revision' => array(
-			'rule' => array('custom', '/^\d+(\.\d+)*$/'),
+			'rule' => array('custom', '/^(\d+(\.\d+)*|.*%[^%]+%.*)$/'),
 			'required' => false,
 			'allowEmpty' => true,
-			'message' => "The package's revision attribute is not formatted properly. It must start with a digit. If it contains periods, you must have at least one digit after each period.",
+			'message' => "The package's revision attribute is not formatted properly. It must start with a digit. If it contains periods, you must have at least one digit after each period. Or it must contain a variable (%...%)",
 			'last' => true
 		),
 		'priority' => array(
