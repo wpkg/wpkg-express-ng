@@ -1,31 +1,46 @@
 <?php
 /* SVN FILE: $Id: model.test.php 8225 2009-07-08 03:25:30Z mark_story $ */
+
 /**
- * ModelDeleteTest file
- *
- * Long description for file
+ * ModelIntegrationTest file
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
- * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
- * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://book.cakephp.org/view/1196/Testing CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases.libs.model
  * @since         CakePHP(tm) v 1.2.0.4206
- * @version       $Revision: 8225 $
- * @modifiedby    $LastChangedBy: mark_story $
- * @lastmodified  $Date: 2009-07-07 23:25:30 -0400 (Tue, 07 Jul 2009) $
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
 require_once dirname(__FILE__) . DS . 'model.test.php';
-require_once dirname(__FILE__) . DS . 'model_integration.test.php';
+App::import('Core', 'DboSource');
+
+/**
+ * DboMock class
+ * A Dbo Source driver to mock a connection and a identity name() method
+ */
+class DboMock extends DboSource {
+
+/**
+* Returns the $field without modifications
+*/
+	function name($field) {
+		return $field;
+	}
+/**
+* Returns true to fake a database connection
+*/
+	function connect() {
+		return true;
+	}
+}
 
 /**
  * ModelIntegrationTest
@@ -34,6 +49,7 @@ require_once dirname(__FILE__) . DS . 'model_integration.test.php';
  * @subpackage    cake.tests.cases.libs.model.operations
  */
 class ModelIntegrationTest extends BaseModelTest {
+
 /**
  * testPkInHAbtmLinkModelArticleB
  *
@@ -45,6 +61,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$TestModel2 =& new ArticleB();
 		$this->assertEqual($TestModel2->ArticlesTag->primaryKey, 'article_id');
 	}
+
 /**
  * Tests that $cacheSources can only be disabled in the db using model settings, not enabled
  *
@@ -64,6 +81,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$TestModel->setSource('join_as');
 		$this->assertFalse($this->db->cacheSources);
 	}
+
 /**
  * testPkInHabtmLinkModel method
  *
@@ -92,6 +110,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$this->assertEqual($TestModel4->JoinAsJoinB->primaryKey, 'id');
 
 	}
+
 /**
  * testDynamicBehaviorAttachment method
  *
@@ -128,6 +147,45 @@ class ModelIntegrationTest extends BaseModelTest {
 		$this->assertEqual($TestModel->Behaviors->attached(), array());
 		$this->assertFalse(isset($TestModel->Behaviors->Tree));
 	}
+
+/**
+ * testFindWithJoinsOption method
+ *
+ * @access public
+ * @return void
+ */
+	function testFindWithJoinsOption() {
+		$this->loadFixtures('Article', 'User');
+		$TestUser =& new User();
+
+		$options = array (
+			'fields' => array(
+				'user',
+				'Article.published',
+			),
+			'joins' => array (
+				array (
+					'table' => 'articles',
+					'alias' => 'Article',
+					'type'  => 'LEFT',
+					'conditions' => array(
+						'User.id = Article.user_id',
+					),
+				),
+			),
+			'group' => array('User.user'),
+			'recursive' => -1,
+		);
+		$result = $TestUser->find('all', $options);
+		$expected = array(
+			array('User' => array('user' => 'garrett'), 'Article' => array('published' => '')),
+			array('User' => array('user' => 'larry'), 'Article' => array('published' => 'Y')),
+			array('User' => array('user' => 'mariano'), 'Article' => array('published' => 'Y')),
+			array('User' => array('user' => 'nate'), 'Article' => array('published' => ''))
+		);
+		$this->assertEqual($result, $expected);
+	}
+
 /**
  * Tests cross database joins.  Requires $test and $test2 to both be set in DATABASE_CONFIG
  * NOTE: When testing on MySQL, you must set 'persistent' => false on *both* database connections,
@@ -490,6 +548,7 @@ class ModelIntegrationTest extends BaseModelTest {
 			$this->_fixtures[$this->_fixtureClassMap[$class]]->drop($db2);
 		}
 	}
+
 /**
  * testDisplayField method
  *
@@ -506,6 +565,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$this->assertEqual($Person->displayField, 'name');
 		$this->assertEqual($Comment->displayField, 'id');
 	}
+
 /**
  * testSchema method
  *
@@ -528,11 +588,12 @@ class ModelIntegrationTest extends BaseModelTest {
 
 		$this->assertEqual($Post->getColumnTypes(), array_combine($columns, $types));
 	}
+
 /**
  * test deconstruct() with time fields.
  *
  * @return void
- **/
+ */
 	function testDeconstructFieldsTime() {
 		$this->loadFixtures('Apple');
 		$TestModel =& new Apple();
@@ -613,6 +674,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$TestModel->set($data);
 		$this->assertEqual($TestModel->data, $data);
 	}
+
 /**
  * testDeconstructFields with datetime, timestamp, and date fields
  *
@@ -789,6 +851,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$TestModel->set($data);
 		$this->assertEqual($TestModel->data, $data);
 	}
+
 /**
  * testTablePrefixSwitching method
  *
@@ -842,6 +905,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$this->assertEqual($db2->fullTableName($TestModel, false), 'apples');
 		$this->assertEqual($db1->fullTableName($TestModel, false), 'apples');
 	}
+
 /**
  * Tests validation parameter order in custom validation methods
  *
@@ -852,6 +916,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$TestModel =& new ValidationTest1();
 		$this->assertNull($TestModel->getAssociated('Foo'));
 	}
+
 /**
  * testLoadModelSecondIteration method
  *
@@ -868,11 +933,12 @@ class ModelIntegrationTest extends BaseModelTest {
 		$this->assertIsA($model->ModelC, 'ModelC');
 		$this->assertIsA($model->ModelC->ModelD, 'ModelD');
 	}
+
 /**
- * ensure that __exists is reset on create
+ * ensure that exists() does not persist between method calls reset on create
  *
  * @return void
- **/
+ */
 	function testResetOfExistsOnCreate() {
 		$this->loadFixtures('Article');
 		$Article =& new Article();
@@ -889,6 +955,31 @@ class ModelIntegrationTest extends BaseModelTest {
 		$result = $Article->read(null, 2);
 		$this->assertEqual($result['Article']['title'], 'Staying alive');
 	}
+
+/**
+ * testUseTableFalseExistsCheck method
+ *
+ * @return void
+ */
+	function testUseTableFalseExistsCheck() {
+		$this->loadFixtures('Article');
+		$Article =& new Article();
+		$Article->id = 1337;
+		$result = $Article->exists();
+		$this->assertFalse($result);
+
+		$Article->useTable = false;
+		$Article->id = null;
+		$result = $Article->exists();
+		$this->assertFalse($result);
+
+		// An article with primary key of '1' has been loaded by the fixtures.
+		$Article->useTable = false;
+		$Article->id = 1;
+		$result = $Article->exists();
+		$this->assertTrue($result);
+	}
+
 /**
  * testPluginAssociations method
  *
@@ -1013,6 +1104,7 @@ class ModelIntegrationTest extends BaseModelTest {
 
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * Tests getAssociated method
  *
@@ -1161,13 +1253,14 @@ class ModelIntegrationTest extends BaseModelTest {
 		$this->assertEqual($TestModel->Tag->name, 'Tag');
 		$this->assertEqual($TestFakeModel->Tag->name, 'Tag');
 	}
+
 /**
  * test Model::__construct
  *
  * ensure that $actsAS and $_findMethods are merged.
  *
  * @return void
- **/
+ */
 	function testConstruct() {
 		$this->loadFixtures('Post', 'Comment');
 
@@ -1181,13 +1274,14 @@ class ModelIntegrationTest extends BaseModelTest {
 		$this->assertEqual($TestModel->actsAs, $expected);
 		$this->assertTrue(isset($TestModel->Behaviors->Containable));
 	}
+
 /**
  * test Model::__construct
  *
  * ensure that $actsAS and $_findMethods are merged.
  *
  * @return void
- **/
+ */
 	function testConstructWithAlternateDataSource() {
 		$TestModel =& ClassRegistry::init(array(
 			'class' => 'DoesntMatter', 'ds' => 'test_suite', 'table' => false
@@ -1198,6 +1292,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$NewVoid =& new TheVoid(null, false, 'other');
 		$this->assertEqual('other', $NewVoid->useDbConfig);
 	}
+
 /**
  * testColumnTypeFetching method
  *
@@ -1216,6 +1311,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$this->assertEqual($model->getColumnType('Tag.id'), 'integer');
 		$this->assertEqual($model->getColumnType('Article.id'), 'integer');
 	}
+
 /**
  * testHabtmUniqueKey method
  *
@@ -1226,6 +1322,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$model =& new Item();
 		$this->assertFalse($model->hasAndBelongsToMany['Portfolio']['unique']);
 	}
+
 /**
  * testIdentity method
  *
@@ -1248,6 +1345,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$expected = 'AnotherTest';
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testWithAssociation method
  *
@@ -1499,6 +1597,7 @@ class ModelIntegrationTest extends BaseModelTest {
 
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testFindSelfAssociations method
  *
@@ -1608,6 +1707,7 @@ class ModelIntegrationTest extends BaseModelTest {
 
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testDynamicAssociations method
  *
@@ -1715,6 +1815,7 @@ class ModelIntegrationTest extends BaseModelTest {
 
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testCreation method
  *
@@ -1833,5 +1934,35 @@ class ModelIntegrationTest extends BaseModelTest {
 		$this->assertEqual($FeaturedModel->create($data), $expected);
 	}
 
+/**
+ * testEscapeField to prove it escapes the field well even when it has part of the alias on it
+ * @see ttp://cakephp.lighthouseapp.com/projects/42648-cakephp-1x/tickets/473-escapefield-doesnt-consistently-prepend-modelname
+ *
+ * @access public
+ * @return void
+ */
+	function testEscapeField() {
+		$TestModel =& new Test();
+		$db =& $TestModel->getDataSource();
+
+		$result = $TestModel->escapeField('test_field');
+		$expected = $db->name('Test.test_field');
+		$this->assertEqual($result, $expected);
+
+		$result = $TestModel->escapeField('TestField');
+		$expected = $db->name('Test.TestField');
+		$this->assertEqual($result, $expected);
+
+		$result = $TestModel->escapeField('DomainHandle', 'Domain');
+		$expected = $db->name('Domain.DomainHandle');
+		$this->assertEqual($result, $expected);
+
+		ConnectionManager::create('mock', array('driver' => 'mock'));
+		$TestModel->setDataSource('mock');
+		$db =& $TestModel->getDataSource();
+
+		$result = $TestModel->escapeField('DomainHandle', 'Domain');
+		$expected = $db->name('Domain.DomainHandle');
+		$this->assertEqual($result, $expected);
+	}
 }
-?>

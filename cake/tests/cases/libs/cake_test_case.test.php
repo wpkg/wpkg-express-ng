@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * CakeTestCaseTest file
  *
@@ -7,22 +6,18 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2006-2008, Cake Software Foundation, Inc.
+ * CakePHP : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc.
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @filesource
- * @copyright     Copyright 2006-2008, Cake Software Foundation, Inc.
- * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP Project
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc.
+ * @link          http://cakephp.org CakePHP Project
  * @package       cake
  * @subpackage    cake.cake.libs.
  * @since         CakePHP v 1.2.0.4487
- * @version       $Revision$
- * @modifiedby    $LastChangedBy$
- * @lastmodified  $Date$
- * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::import('Core', 'CakeTestCase');
 
@@ -37,6 +32,7 @@ Mock::generate('CakeTestCase', 'CakeDispatcherMockTestCase');
 
 SimpleTest::ignore('SubjectCakeTestCase');
 SimpleTest::ignore('CakeDispatcherMockTestCase');
+
 /**
  * SubjectCakeTestCase
  *
@@ -44,6 +40,7 @@ SimpleTest::ignore('CakeDispatcherMockTestCase');
  * @subpackage    cake.tests.cases.libs
  */
 class SubjectCakeTestCase extends CakeTestCase {
+
 /**
  * Feed a Mocked Reporter to the subject case
  * prevents its pass/fails from affecting the real test
@@ -55,6 +52,7 @@ class SubjectCakeTestCase extends CakeTestCase {
 	function setReporter(&$reporter) {
 		$this->_reporter = &$reporter;
 	}
+
 /**
  * testDummy method
  *
@@ -64,6 +62,7 @@ class SubjectCakeTestCase extends CakeTestCase {
 	function testDummy() {
 	}
 }
+
 /**
  * CakeTestCaseTest
  *
@@ -71,6 +70,7 @@ class SubjectCakeTestCase extends CakeTestCase {
  * @subpackage    cake.tests.cases.libs
  */
 class CakeTestCaseTest extends CakeTestCase {
+
 /**
  * setUp
  *
@@ -78,11 +78,13 @@ class CakeTestCaseTest extends CakeTestCase {
  * @return void
  */
 	function setUp() {
+		$this->_debug = Configure::read('debug');
 		$this->Case =& new SubjectCakeTestCase();
 		$reporter =& new MockCakeHtmlReporter();
 		$this->Case->setReporter($reporter);
 		$this->Reporter = $reporter;
 	}
+
 /**
  * tearDown
  *
@@ -90,9 +92,21 @@ class CakeTestCaseTest extends CakeTestCase {
  * @return void
  */
 	function tearDown() {
+		Configure::write('debug', $this->_debug);
 		unset($this->Case);
 		unset($this->Reporter);
 	}
+
+/**
+ * endTest
+ *
+ * @access public
+ * @return void
+ */
+	function endTest() {
+		App::build();
+	}
+
 /**
  * testAssertGoodTags
  *
@@ -124,7 +138,7 @@ class CakeTestCaseTest extends CakeTestCase {
 			'My link',
 			'/a'
 		);
-		$this->assertTrue($this->Case->assertTags($input, $pattern));
+		$this->assertTrue($this->Case->assertTags($input, $pattern), 'Attributes in wrong order. %s');
 
 		$input = "<a    href=\"/test.html\"\t\n\tclass=\"active\"\tid=\"primary\">\t<span>My link</span></a>";
 		$pattern = array(
@@ -134,7 +148,7 @@ class CakeTestCaseTest extends CakeTestCase {
 			'/span',
 			'/a'
 		);
-		$this->assertTrue($this->Case->assertTags($input, $pattern));
+		$this->assertTrue($this->Case->assertTags($input, $pattern), 'Whitespace consumption %s');
 
 		$input = '<p class="info"><a href="/test.html" class="active"><strong onClick="alert(\'hey\');">My link</strong></a></p>';
 		$pattern = array(
@@ -148,7 +162,89 @@ class CakeTestCaseTest extends CakeTestCase {
 		);
 		$this->assertTrue($this->Case->assertTags($input, $pattern));
 	}
+
 /**
+ * test that assertTags knows how to handle correct quoting.
+ *
+ * @return void
+ */
+	function testAssertTagsQuotes() {
+		$input = '<a href="/test.html" class="active">My link</a>';
+		$pattern = array(
+			'a' => array('href' => '/test.html', 'class' => 'active'),
+			'My link',
+			'/a'
+		);
+		$this->assertTrue($this->Case->assertTags($input, $pattern), 'Double quoted attributes %s');
+
+		$input = "<a href='/test.html' class='active'>My link</a>";
+		$pattern = array(
+			'a' => array('href' => '/test.html', 'class' => 'active'),
+			'My link',
+			'/a'
+		);
+		$this->assertTrue($this->Case->assertTags($input, $pattern), 'Single quoted attributes %s');
+
+		$input = "<a href='/test.html' class='active'>My link</a>";
+		$pattern = array(
+			'a' => array('href' => 'preg:/.*\.html/', 'class' => 'active'),
+			'My link',
+			'/a'
+		);
+		$this->assertTrue($this->Case->assertTags($input, $pattern), 'Single quoted attributes %s');
+	}
+
+/**
+ * testNumericValuesInExpectationForAssertTags
+ *
+ * @access public
+ * @return void
+ */
+	function testNumericValuesInExpectationForAssertTags() {
+		$value = 220985;
+
+		$input = '<p><strong>' . $value . '</strong></p>';
+		$pattern = array(
+			'<p',
+				'<strong',
+					$value,
+				'/strong',
+			'/p'
+		);
+		$this->assertTrue($this->Case->assertTags($input, $pattern));
+
+		$input = '<p><strong>' . $value . '</strong></p><p><strong>' . $value . '</strong></p>';
+		$pattern = array(
+			'<p',
+				'<strong',
+					$value,
+				'/strong',
+			'/p',
+			'<p',
+				'<strong',
+					$value,
+				'/strong',
+			'/p',
+		);
+		$this->assertTrue($this->Case->assertTags($input, $pattern));
+
+		$input = '<p><strong>' . $value . '</strong></p><p id="' . $value . '"><strong>' . $value . '</strong></p>';
+		$pattern = array(
+			'<p',
+				'<strong',
+					$value,
+				'/strong',
+			'/p',
+			'p' => array('id' => $value),
+				'<strong',
+					$value,
+				'/strong',
+			'/p',
+		);
+		$this->assertTrue($this->Case->assertTags($input, $pattern));
+	}
+
+ /**
  * testBadAssertTags
  *
  * @access public
@@ -174,6 +270,7 @@ class CakeTestCaseTest extends CakeTestCase {
 		);
 		$this->assertFalse($this->Case->assertTags($input, $pattern));
 	}
+
 /**
  * testBefore
  *
@@ -191,6 +288,7 @@ class CakeTestCaseTest extends CakeTestCase {
 		$this->assertTrue(is_a($this->Case->_fixtures['core.post'], 'CakeTestFixture'));
 		$this->assertEqual($this->Case->_fixtureClassMap['Post'], 'core.post');
 	}
+
 /**
  * testAfter
  *
@@ -207,6 +305,7 @@ class CakeTestCaseTest extends CakeTestCase {
 		$this->Case->after('testDummy');
 		$this->assertTrue($this->Case->__truncated);
 	}
+
 /**
  * testLoadFixtures
  *
@@ -221,6 +320,7 @@ class CakeTestCaseTest extends CakeTestCase {
 		$this->Case->loadFixtures('Wrong!');
 		$this->Case->end();
 	}
+
 /**
  * testGetTests Method
  *
@@ -232,29 +332,26 @@ class CakeTestCaseTest extends CakeTestCase {
 		$this->assertEqual(array_slice($result, 0, 2), array('start', 'startCase'));
 		$this->assertEqual(array_slice($result, -2), array('endCase', 'end'));
 	}
+
 /**
  * TestTestAction
  *
  * @access public
  * @return void
- **/
+ */
 	function testTestAction() {
-		$_back = array(
-			'controller' => Configure::read('controllerPaths'),
-			'view' => Configure::read('viewPaths'),
-			'model' => Configure::read('modelPaths'),
-			'plugin' => Configure::read('pluginPaths')
-		);
-		Configure::write('controllerPaths', array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'controllers' . DS));
-		Configure::write('viewPaths', array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views' . DS));
-		Configure::write('modelPaths', array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'models' . DS));
-		Configure::write('pluginPaths', array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'plugins' . DS));
+		App::build(array(
+			'plugins' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'plugins' . DS),
+			'models' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'models' . DS),
+			'views' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views' . DS),
+			'controllers' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'controllers' . DS)
+		), true);
 
 		$result = $this->Case->testAction('/tests_apps/index', array('return' => 'view'));
-		$this->assertPattern('/This is the TestsAppsController index view/', $result);
+		$this->assertPattern('/^\s*This is the TestsAppsController index view\s*$/i', $result);
 
 		$result = $this->Case->testAction('/tests_apps/index', array('return' => 'contents'));
-		$this->assertPattern('/This is the TestsAppsController index view/', $result);
+		$this->assertPattern('/\bThis is the TestsAppsController index view\b/i', $result);
 		$this->assertPattern('/<html/', $result);
 		$this->assertPattern('/<\/html>/', $result);
 
@@ -277,7 +374,6 @@ class CakeTestCaseTest extends CakeTestCase {
 			'method' => 'get',
 		));
 		$this->assertTrue(isset($result['params']['url']['url']));
-		$this->assertTrue(isset($result['params']['url']['output']));
 		$this->assertEqual(array_keys($result['params']['named']), array('var1', 'var2'));
 
 		$result = $this->Case->testAction('/tests_apps_posts/url_var/gogo/val2', array(
@@ -295,7 +391,6 @@ class CakeTestCaseTest extends CakeTestCase {
 				'blue' => 'mana'
 			)
 		));
-		$this->assertTrue(isset($result['params']['url']['output']));
 		$this->assertTrue(isset($result['params']['url']['red']));
 		$this->assertTrue(isset($result['params']['url']['blue']));
 		$this->assertTrue(isset($result['params']['url']['url']));
@@ -367,22 +462,18 @@ class CakeTestCaseTest extends CakeTestCase {
 		$db =& ConnectionManager::getDataSource('test_suite');
 		$db->config['prefix'] = $_backPrefix;
 		$fixture->drop($db);
-
-
-		Configure::write('modelPaths', $_back['model']);
-		Configure::write('controllerPaths', $_back['controller']);
-		Configure::write('viewPaths', $_back['view']);
-		Configure::write('pluginPaths', $_back['plugin']);
 	}
+
 /**
  * testSkipIf
  *
  * @return void
- **/
+ */
 	function testSkipIf() {
 		$this->assertTrue($this->Case->skipIf(true));
 		$this->assertFalse($this->Case->skipIf(false));
 	}
+
 /**
  * testTestDispatcher
  *
@@ -390,14 +481,12 @@ class CakeTestCaseTest extends CakeTestCase {
  * @return void
  */
 	function testTestDispatcher() {
-		$_back = array(
-			'controller' => Configure::read('controllerPaths'),
-			'view' => Configure::read('viewPaths'),
-			'plugin' => Configure::read('pluginPaths')
-		);
-		Configure::write('controllerPaths', array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'controllers' . DS));
-		Configure::write('viewPaths', array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views' . DS));
-		Configure::write('pluginPaths', array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'plugins' . DS));
+		App::build(array(
+			'plugins' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'plugins' . DS),
+			'models' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'models' . DS),
+			'views' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views' . DS),
+			'controllers' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'controllers' . DS)
+		), true);
 
 		$Dispatcher =& new CakeTestDispatcher();
 		$Case =& new CakeDispatcherMockTestCase();
@@ -409,10 +498,5 @@ class CakeTestCaseTest extends CakeTestCase {
 		$this->assertTrue(isset($Dispatcher->testCase));
 
 		$return = $Dispatcher->dispatch('/tests_apps/index', array('autoRender' => 0, 'return' => 1, 'requested' => 1));
-
-		Configure::write('controllerPaths', $_back['controller']);
-		Configure::write('viewPaths', $_back['view']);
-		Configure::write('pluginPaths', $_back['plugin']);
 	}
 }
-?>

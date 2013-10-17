@@ -21,7 +21,7 @@
  */
 ?>
 <?php
-$javascript->link('jquery.js', false);
+$html->script('jquery.js', false);
 $js = '
 		function updateVariables() {
 			$("#variables a[href*=\"delete\"]").click(function() {
@@ -33,7 +33,7 @@ $js = '
 			updateVariables();
 		});
 ';
-$javascript->codeBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
 ?>
 <h2>Variables for <?php echo $type; ?> '<?php echo $html->link($name, array('controller' => Inflector::pluralize(strtolower($type)), 'action' => 'view', $recordId), array('title' => $name)); ?>' - [ <?php echo $html->image('add.png', array('alt' => 'Add', 'url' => array('action' => 'add', strtolower($type), $recordId))); ?> ]</h2><hr class="hbar" />
 

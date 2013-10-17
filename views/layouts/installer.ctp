@@ -48,8 +48,6 @@
     <?php echo $content_for_layout; ?>
   </div>
 
-  <?php echo $cakeDebug; ?>
-
 </div>
 
 </body>

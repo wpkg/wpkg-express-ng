@@ -22,10 +22,10 @@
 ?>
 <?php
 if (!$isAjax) {
-	$javascript->link('jquery.js', false);
-	$javascript->link('jquery_json.js', false);
-	$javascript->link('pretty.js', false);
-	$javascript->link('dateformat.js', false);
+	$html->script('jquery.js', false);
+	$html->script('jquery_json.js', false);
+	$html->script('pretty.js', false);
+	$html->script('dateformat.js', false);
 	$js = ' var interval;
 			var params = "";
 			function prettyDates() {
@@ -90,7 +90,7 @@ if (!$isAjax) {
 				update();
 			});
 	';
-	$javascript->codeBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+	$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
 }	
 ?>
 <h2>Hosts - [ <?php echo $html->image('add.png', array('alt' => 'Add', 'url' => array('action' => 'add'))) ?> ]</h2><hr class="hbar" />
@@ -130,7 +130,7 @@ $sortKey = $paginator->sortKey();
 			echo $html->image('go-bottom.png', array('url' => array('action' => 'movebottom', $host['Host']['id']))) . "&nbsp;";
 
 			echo $html->image('pencil.png', array('alt' => 'Edit', 'url' => array('action' => 'edit', $host['Host']['id']))) . "&nbsp;";
-			echo $html->link($html->image('delete.png'), array('action'=>'delete', $host['Host']['id']), array('alt' => 'Delete'), false, false);
+			echo $html->link($html->image('delete.png'), array('action'=>'delete', $host['Host']['id']), array('alt' => 'Delete', 'escape' => false), false, false);
 		?></td>
 	</tr>
 <?php endforeach; ?>

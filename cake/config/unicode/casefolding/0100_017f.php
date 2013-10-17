@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * Case Folding Properties.
  *
@@ -11,23 +10,20 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
- * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.config.unicode.casefolding
  * @since         CakePHP(tm) v 1.2.0.5691
- * @version       $Revision$
- * @modifiedby    $LastChangedBy$
- * @lastmodified  $Date$
- * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
 /**
  * The upper field is the decimal value of the upper case character
  *
@@ -109,4 +105,3 @@ $config['0100_017f'][] = array('upper' => 377, 'status' => 'C', 'lower' => array
 $config['0100_017f'][] = array('upper' => 379, 'status' => 'C', 'lower' => array(380)); /* LATIN CAPITAL LETTER Z WITH DOT ABOVE */
 $config['0100_017f'][] = array('upper' => 381, 'status' => 'C', 'lower' => array(382)); /* LATIN CAPITAL LETTER Z WITH CARON */
 $config['0100_017f'][] = array('upper' => 383, 'status' => 'C', 'lower' => array(115)); /* LATIN SMALL LETTER LONG S */
-?>

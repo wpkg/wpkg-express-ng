@@ -21,7 +21,8 @@
  */
 ?>
 <?php
-      $width = 75;
+	$width = 75;
+	$value_width = 20;
 	$pathLabel = "Path: ";
 	$valueLabel = "Value: ";
 	$showPath = true;
@@ -40,6 +41,7 @@
 			break;
 		case CHECK_TYPE_HOST:
 			$width = 136;
+			$value_width = 20;
 			$showValue = true;
 			$showPath = false;
 			break;

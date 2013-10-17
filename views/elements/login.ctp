@@ -21,8 +21,8 @@
  */
 ?>
 <?php
-$javascript->link('jquery.js', false);
-$javascript->codeBlock('$(document).ready(function(){ $("input:visible:enabled:first").focus(); })', array('allowCache' => false, 'safe' => false, 'inline' => false));
+$html->script('jquery.js', false);
+$html->scriptBlock('$(document).ready(function(){ $("input:visible:enabled:first").focus(); })', array('allowCache' => false, 'safe' => false, 'inline' => false));
 
 echo $form->create($dest, $url);
 echo "<fieldset><legend>wpkgExpress Login</legend>";

@@ -94,12 +94,12 @@ switch ($PackageCheck['type']) {
 		}
 }
 
-$out .= " [ " . $html->link($html->image('go-top.png'), array('action' => 'movetop', 'check', $PackageCheck['id']), null, false, false);
-$out .= " " . $html->link($html->image('go-up.png'), array('action' => 'moveup', 'check', $PackageCheck['id']), null, false, false);
-$out .= " " . $html->link($html->image('go-down.png'), array('action' => 'movedown', 'check', $PackageCheck['id']), null, false, false);
-$out .= " " . $html->link($html->image('go-bottom.png'), array('action' => 'movebottom', 'check', $PackageCheck['id']), null, false, false);
+$out .= " [ " . $html->link($html->image('go-top.png'), array('action' => 'movetop', 'check', $PackageCheck['id']), array('escape' => false), false, false);
+$out .= " " . $html->link($html->image('go-up.png'), array('action' => 'moveup', 'check', $PackageCheck['id']), array('escape' => false), false, false);
+$out .= " " . $html->link($html->image('go-down.png'), array('action' => 'movedown', 'check', $PackageCheck['id']), array('escape' => false), false, false);
+$out .= " " . $html->link($html->image('go-bottom.png'), array('action' => 'movebottom', 'check', $PackageCheck['id']), array('escape' => false), false, false);
 
-$out .= " " . $html->link($html->image('pencil.png'), array('action' => 'edit', 'check', $PackageCheck['id']), null, false, false);
-$out .= " " . $html->link($html->image('delete.png'), array('action' => 'delete', 'check', $PackageCheck['id']), null, false, false) . " ]<br />";
+$out .= " " . $html->link($html->image('pencil.png'), array('action' => 'edit', 'check', $PackageCheck['id']), array('escape' => false), false, false);
+$out .= " " . $html->link($html->image('delete.png'), array('action' => 'delete', 'check', $PackageCheck['id']), array('escape' => false), false, false) . " ]<br />";
 echo $out;
 ?>

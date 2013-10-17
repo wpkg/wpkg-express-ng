@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * Class collections.
  *
@@ -7,23 +6,20 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
- * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
  * @since         CakePHP(tm) v 0.9.2
- * @version       $Revision$
- * @modifiedby    $LastChangedBy$
- * @lastmodified  $Date$
- * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
 /**
  * Class Collections.
  *
@@ -35,6 +31,7 @@
  * @subpackage    cake.cake.libs
  */
 class ClassRegistry {
+
 /**
  * Names of classes with their objects.
  *
@@ -42,6 +39,7 @@ class ClassRegistry {
  * @access private
  */
 	var $__objects = array();
+
 /**
  * Names of class names mapped to the object in the registry.
  *
@@ -49,6 +47,7 @@ class ClassRegistry {
  * @access private
  */
 	var $__map = array();
+
 /**
  * Default constructor parameter settings, indexed by type
  *
@@ -56,6 +55,7 @@ class ClassRegistry {
  * @access private
  */
 	var $__config = array();
+
 /**
  * Return a singleton instance of the ClassRegistry.
  *
@@ -69,28 +69,30 @@ class ClassRegistry {
 		}
 		return $instance[0];
 	}
+
 /**
- * Loads a class, registers the object in the registry and returns instance of the object.
+ * Loads a class, registers the object in the registry and returns instance of the object. ClassRegistry::init()
+ * is used as a factory for models, and handle correct injecting of settings, that assist in testing.
  *
  * Examples
  * Simple Use: Get a Post model instance ```ClassRegistry::init('Post');```
- * 
- * Exapanded: ```array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry', 'type' => 'TypeOfClass');```
- * 
+ *
+ * Exapanded: ```array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry', 'type' => 'Model');```
+ *
  * Model Classes can accept optional ```array('id' => $id, 'table' => $table, 'ds' => $ds, 'alias' => $alias);```
- * 
+ *
  * When $class is a numeric keyed array, multiple class instances will be stored in the registry,
  *  no instance of the object will be returned
  * {{{
  * array(
- *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry', 'type' => 'TypeOfClass'),
- *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry', 'type' => 'TypeOfClass'),
- *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry', 'type' => 'TypeOfClass')
+ *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry', 'type' => 'Model'),
+ *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry', 'type' => 'Model'),
+ *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry', 'type' => 'Model')
  * );
  * }}}
  * @param mixed $class as a string or a single key => value array instance will be created,
  *  stored in the registry and returned.
- * @param string $type TypeOfClass
+ * @param string $type Only model is accepted as a valid value for $type.
  * @return object instance of ClassName
  * @access public
  * @static
@@ -117,12 +119,12 @@ class ClassRegistry {
 
 		foreach ($objects as $key => $settings) {
 			if (is_array($settings)) {
-				$plugin = $pluginPath = null;
+				$pluginPath = null;
 				$settings = array_merge($defaults, $settings);
 				$class = $settings['class'];
-
-				if (strpos($class, '.') !== false) {
-					list($plugin, $class) = explode('.', $class);
+				
+				list($plugin, $class) = pluginSplit($class);
+				if ($plugin) {
 					$pluginPath = $plugin . '.';
 				}
 
@@ -169,6 +171,7 @@ class ClassRegistry {
 		}
 		return ${$class};
 	}
+
 /**
  * Add $object to the registry, associating it with the name $key.
  *
@@ -187,6 +190,7 @@ class ClassRegistry {
 		}
 		return false;
 	}
+
 /**
  * Remove object which corresponds to given key.
  *
@@ -202,6 +206,7 @@ class ClassRegistry {
 			unset($_this->__objects[$key]);
 		}
 	}
+
 /**
  * Returns true if given key is present in the ClassRegistry.
  *
@@ -220,6 +225,7 @@ class ClassRegistry {
 		}
 		return false;
 	}
+
 /**
  * Get all keys from the registry.
  *
@@ -231,11 +237,12 @@ class ClassRegistry {
 		$_this =& ClassRegistry::getInstance();
 		return array_keys($_this->__objects);
 	}
+
 /**
  * Return object which corresponds to given key.
  *
  * @param string $key Key of object to look for
- * @return mixed Object stored in registry
+ * @return mixed Object stored in registry or boolean false if the object does not exist.
  * @access public
  * @static
  */
@@ -253,6 +260,7 @@ class ClassRegistry {
 		}
 		return $return;
 	}
+
 /**
  * Sets the default constructor parameter for an object type
  *
@@ -277,6 +285,7 @@ class ClassRegistry {
 		}
 		$_this->__config[$type] = $param;
 	}
+
 /**
  * Checks to see if $alias is a duplicate $class Object
  *
@@ -297,6 +306,7 @@ class ClassRegistry {
 		}
 		return $duplicate;
 	}
+
 /**
  * Add a key name pair to the registry to map name to class in the registry.
  *
@@ -313,6 +323,7 @@ class ClassRegistry {
 			$_this->__map[$key] = $name;
 		}
 	}
+
 /**
  * Get all keys from the map in the registry.
  *
@@ -324,6 +335,7 @@ class ClassRegistry {
 		$_this =& ClassRegistry::getInstance();
 		return array_keys($_this->__map);
 	}
+
 /**
  * Return the name of a class in the registry.
  *
@@ -337,6 +349,7 @@ class ClassRegistry {
 			return $this->__map[$key];
 		}
 	}
+
 /**
  * Flushes all objects from the ClassRegistry.
  *
@@ -350,4 +363,3 @@ class ClassRegistry {
 		$_this->__map = array();
 	}
 }
-?>

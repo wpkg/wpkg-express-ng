@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * Case Folding Properties.
  *
@@ -11,23 +10,20 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
- * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.config.unicode.casefolding
  * @since         CakePHP(tm) v 1.2.0.5691
- * @version       $Revision$
- * @modifiedby    $LastChangedBy$
- * @lastmodified  $Date$
- * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
 /**
  * The upper field is the decimal value of the upper case character
  *
@@ -90,4 +86,3 @@ $config['2c00_2c5f'][] = array('upper' => 11307, 'status' => 'C', 'lower' => arr
 $config['2c00_2c5f'][] = array('upper' => 11308, 'status' => 'C', 'lower' => array(11356)); /* GLAGOLITIC CAPITAL LETTER SHTAPIC */
 $config['2c00_2c5f'][] = array('upper' => 11309, 'status' => 'C', 'lower' => array(11357)); /* GLAGOLITIC CAPITAL LETTER TROKUTASTI A */
 $config['2c00_2c5f'][] = array('upper' => 11310, 'status' => 'C', 'lower' => array(11358)); /* GLAGOLITIC CAPITAL LETTER LATINATE MYSLITE */
-?>

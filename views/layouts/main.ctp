@@ -35,8 +35,8 @@
 
   <?php echo $html->css('plain'); ?>
   <!--[if IE 6]>
-	<?php echo $javascript->link('DD_belatedPNG_007a-min.js'); ?>
-    <?php echo $javascript->codeBlock('DD_belatedPNG.fix("img");', array('safe' => false)); ?>
+	<?php echo $html->script('DD_belatedPNG_007a-min.js'); ?>
+    <?php echo $html->scriptBlock('DD_belatedPNG.fix("img");', array('safe' => false)); ?>
   <![endif]-->
   <?php echo $scripts_for_layout; ?>
 </head>
@@ -87,8 +87,6 @@
     </div>
 
   </div>
-
-  <?php echo $cakeDebug; ?>
 
 </div>
 

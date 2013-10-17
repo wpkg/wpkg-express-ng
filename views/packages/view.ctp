@@ -21,8 +21,8 @@
  */
 ?>
 <?php
-$javascript->link('jquery.js', false);
-$javascript->link('pretty.js', false);
+$html->script('jquery.js', false);
+$html->script('pretty.js', false);
 $js = ' 
 		var interval;
 		function updateChecks() {
@@ -60,14 +60,14 @@ $js = '
 			updateActions();
 	    });
 ';
-$javascript->codeBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
 
 $execute = ucwords(constValToLCSingle("package_execute", $package['Package']['execute']));
 $reboot = ucwords(constValToLCSingle("package_reboot", $package['Package']['reboot']));
 $notify = ucwords(constValToLCSingle("package_notify", $package['Package']['notify']));
 ?>
 <style type="text/css">label {width: 114px;}</style>
-<h2>Package Details for '<?php echo $package['Package']['name']; ?>' - [ <?php echo $html->image('pencil.png', array('alt' => 'Edit', 'url' => array('action' => 'edit', $package['Package']['id']))) . "&nbsp;" . $html->link($html->image('delete.png'), array('action'=>'delete', $package['Package']['id']), array('alt' => 'Delete'), sprintf("Are you sure you want to delete Package '%s'?", addcslashes($package['Package']['name'], '"')), false) . "&nbsp;" . $html->image('var.png', array('alt' => 'Variables', 'url' => array('controller' => 'variables', 'action' => 'view', 'package', $package['Package']['id']))) ?> ]</h2><hr class="hbar" />
+<h2>Package Details for '<?php echo $package['Package']['name']; ?>' - [ <?php echo $html->image('pencil.png', array('alt' => 'Edit', 'url' => array('action' => 'edit', $package['Package']['id']))) . "&nbsp;" . $html->link($html->image('delete.png'), array('action'=>'delete', $package['Package']['id']), array('alt' => 'Delete', 'escape' => false), sprintf("Are you sure you want to delete Package '%s'?", addcslashes($package['Package']['name'], '"')), false) . "&nbsp;" . $html->image('var.png', array('alt' => 'Variables', 'url' => array('controller' => 'variables', 'action' => 'view', 'package', $package['Package']['id']))) ?> ]</h2><hr class="hbar" />
 <div class="inputwrap"><label title="<?php echo TOOLTIP_PACKAGE_ENABLED; ?>">Enabled:</label><?php echo $package['Package']['enabled'] == 0 ? "No" : "Yes" ?></div>
 <div class="inputwrap"><label title="<?php echo TOOLTIP_PACKAGE_NAME; ?>">Name:</label><?php echo $package['Package']['name'] ?></div>
 <div class="inputwrap"><label title="<?php echo TOOLTIP_PACKAGE_ID; ?>">ID:</label><?php echo $package['Package']['id_text'] ?></div>

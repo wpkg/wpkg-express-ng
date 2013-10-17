@@ -36,7 +36,7 @@
 					case EXITCODE_REBOOT_FALSE: $reboot = "None"; break;
 					default: $reboot = "Unknown";
 				}
-				echo "<li>" . $exitcode['code'] . " (Reboot: $reboot) [ " . $html->link($html->image('pencil.png'), array('action' => 'edit', 'exitcode', $exitcode['id']), null, false, false) . " " . $html->link($html->image('delete.png'), array('action'=>'delete', 'exitcode', $exitcode['id']), array('escape' => false), false) . " ]</li>";
+				echo "<li>" . $exitcode['code'] . " (Reboot: $reboot) [ " . $html->link($html->image('pencil.png'), array('action' => 'edit', 'exitcode', $exitcode['id']), array('escape' => false), false, false) . " " . $html->link($html->image('delete.png'), array('action'=>'delete', 'exitcode', $exitcode['id']), array('escape' => false), false) . " ]</li>";
 			}
 		?>
 	</ul>

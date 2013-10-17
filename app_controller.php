@@ -21,7 +21,7 @@
  */
 class AppController extends Controller {
 	var $components = array('Security', 'Session', 'Configuration', 'RequestHandler');
-	var $helpers = array('Html', 'Form');
+	var $helpers = array('Html', 'Form', 'Session');
 	var $_cancelAction = false;
 
 	function beforeFilter() {
@@ -133,7 +133,7 @@ class AppController extends Controller {
 	/* Catches all site errors, including HTTP errors */
 	function appError($method, $params) {
 		if (is_array($params) && is_array($params[0]) && !empty($params[0]['url']) && strtolower($params[0]['url']) == 'logout') { // && $this->Session->check('loggedIn')) {
-			$this->Session->del('loggedIn');
+			$this->Session->delete('loggedIn');
 			$this->Session->setFlash('Logged out successfully.');
 			$this->redirect("/");
 			return;

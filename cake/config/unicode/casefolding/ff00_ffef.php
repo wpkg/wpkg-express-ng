@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * Case Folding Properties.
  *
@@ -11,23 +10,20 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
- * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.config.unicode.casefolding
  * @since         CakePHP(tm) v 1.2.0.5691
- * @version       $Revision$
- * @modifiedby    $LastChangedBy$
- * @lastmodified  $Date$
- * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
 /**
  * The upper field is the decimal value of the upper case character
  *
@@ -69,4 +65,3 @@ $config['ff00_ffef'][] = array('upper' => 65335, 'status' => 'C', 'lower' => arr
 $config['ff00_ffef'][] = array('upper' => 65336, 'status' => 'C', 'lower' => array(65368)); /* FULLWIDTH LATIN CAPITAL LETTER X */
 $config['ff00_ffef'][] = array('upper' => 65337, 'status' => 'C', 'lower' => array(65369)); /* FULLWIDTH LATIN CAPITAL LETTER Y */
 $config['ff00_ffef'][] = array('upper' => 65338, 'status' => 'C', 'lower' => array(65370)); /* FULLWIDTH LATIN CAPITAL LETTER Z */
-?>

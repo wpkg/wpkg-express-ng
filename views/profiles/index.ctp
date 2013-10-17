@@ -22,10 +22,10 @@
 ?>
 <?php
 if (!$isAjax) {
-	$javascript->link('jquery.js', false);
-	$javascript->link('jquery_json.js', false);
-	$javascript->link('pretty.js', false);
-	$javascript->link('dateformat.js', false);
+	$html->script('jquery.js', false);
+	$html->script('jquery_json.js', false);
+	$html->script('pretty.js', false);
+	$html->script('dateformat.js', false);
 	$js = ' var interval;
 			var params = "";
 			function prettyDates() {
@@ -86,7 +86,7 @@ if (!$isAjax) {
 				update();
 			});
 	';
-	$javascript->codeBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+	$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
 }
 ?>
 <h2>Profiles - [ <?php echo $html->image('add.png', array('alt' => 'Add', 'url' => array('action' => 'add'))) ?> ]</h2><hr class="hbar" />
@@ -116,7 +116,7 @@ $sortKey = $paginator->sortKey();
 		<td><?php echo $html->link($profile['Profile']['id_text'], array('action'=>'view', $profile['Profile']['id'])); ?></td>
 		<td><div class="date"><?php echo date("Y-m-d h:i:s A", strtotime($profile['Profile']['modified'])); ?></div></td>
 		<td><?php echo $html->image('pencil.png', array('alt' => 'Edit', 'url' => array('action' => 'edit', $profile['Profile']['id']))) . "&nbsp;";
-			  echo $html->link($html->image('delete.png'), array('action'=>'delete', $profile['Profile']['id']), array('alt' => 'Delete'), false, false);
+			  echo $html->link($html->image('delete.png'), array('action'=>'delete', $profile['Profile']['id']), array('alt' => 'Delete', 'escape' => false), false, false);
 			  //echo $html->link($html->image('delete.png'), array('action'=>'delete', $profile['Profile']['id']), array('alt' => 'Delete'), sprintf("Are you sure you want to delete Profile '%s'?", addcslashes($profile['Profile']['id_text'], '"')), false);
 		?></td>
 	</tr>

@@ -1,27 +1,22 @@
 <?php
 /* SVN FILE: $Id: model.test.php 8225 2009-07-08 03:25:30Z mark_story $ */
+
 /**
  * ModelWriteTest file
  *
- * Long description for file
- *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
- * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
- * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://book.cakephp.org/view/1196/Testing CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases.libs.model
  * @since         CakePHP(tm) v 1.2.0.4206
- * @version       $Revision: 8225 $
- * @modifiedby    $LastChangedBy: mark_story $
- * @lastmodified  $Date: 2009-07-07 23:25:30 -0400 (Tue, 07 Jul 2009) $
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
 require_once dirname(__FILE__) . DS . 'model.test.php';
@@ -32,6 +27,7 @@ require_once dirname(__FILE__) . DS . 'model.test.php';
  * @subpackage    cake.tests.cases.libs.model.operations
  */
 class ModelWriteTest extends BaseModelTest {
+
 /**
  * testInsertAnotherHabtmRecordWithSameForeignKey method
  *
@@ -86,6 +82,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $TestModel->JoinAsJoinB->findById(1);
 		$this->assertEqual($result['JoinAsJoinB']['other'], $updatedValue);
 	}
+
 /**
  * testSaveDateAsFirstEntry method
  *
@@ -116,6 +113,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEqual($testResult['Article']['created'], '2008-01-01 00:00:00');
 
 	}
+
 /**
  * testUnderscoreFieldSave method
  *
@@ -141,6 +139,7 @@ class ModelWriteTest extends BaseModelTest {
 		$currentCount = $UnderscoreField->find('count');
 		$this->assertEqual($currentCount, 4);
 	}
+
 /**
  * testAutoSaveUuid method
  *
@@ -162,6 +161,30 @@ class ModelWriteTest extends BaseModelTest {
 		);
 		$this->assertEqual(strlen($result['Uuid']['id']), 36);
 	}
+
+/**
+ * Ensure that if the id key is null but present the save doesn't fail (with an
+ * x sql error: "Column id specified twice")
+ *
+ * @return void
+ * @access public
+ */
+	function testSaveUuidNull() {
+		// SQLite does not support non-integer primary keys
+		$this->skipIf($this->db->config['driver'] == 'sqlite');
+
+		$this->loadFixtures('Uuid');
+		$TestModel =& new Uuid();
+
+		$TestModel->save(array('title' => 'Test record', 'id' => null));
+		$result = $TestModel->findByTitle('Test record');
+		$this->assertEqual(
+			array_keys($result['Uuid']),
+			array('id', 'title', 'count', 'created', 'updated')
+		);
+		$this->assertEqual(strlen($result['Uuid']['id']), 36);
+	}
+
 /**
  * testZeroDefaultFieldValue method
  *
@@ -182,6 +205,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertIdentical($result['DataTest']['count'], '0');
 		$this->assertIdentical($result['DataTest']['float'], '0');
 	}
+
 /**
  * testNonNumericHabtmJoinKey method
  *
@@ -191,7 +215,9 @@ class ModelWriteTest extends BaseModelTest {
 	function testNonNumericHabtmJoinKey() {
 		$this->loadFixtures('Post', 'Tag', 'PostsTag');
 		$Post =& new Post();
-		$Post->bind('Tag', array('type' => 'hasAndBelongsToMany'));
+		$Post->bindModel(array(
+			'hasAndBelongsToMany' => array('Tag')
+		));
 		$Post->Tag->primaryKey = 'tag';
 
 		$result = $Post->find('all');
@@ -280,6 +306,7 @@ class ModelWriteTest extends BaseModelTest {
 		));
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * Tests validation parameter order in custom validation methods
  *
@@ -300,13 +327,14 @@ class ModelWriteTest extends BaseModelTest {
 		));
 		$this->assertEqual($TestModel->data, $expected);
 	}
+
 /**
  * test that Caches are getting cleared on save().
  * ensure that both inflections of controller names are getting cleared
  * as url for controller could be either overallFavorites/index or overall_favorites/index
  *
  * @return void
- **/
+ */
 	function testCacheClearOnSave() {
 		$_back = array(
 			'check' => Configure::read('Cache.check'),
@@ -323,6 +351,7 @@ class ModelWriteTest extends BaseModelTest {
 
 		$data = array(
 			'OverallFavorite' => array(
+				'id' => 22,
 		 		'model_type' => '8-track',
 				'model_id' => '3',
 				'priority' => '1'
@@ -337,6 +366,7 @@ class ModelWriteTest extends BaseModelTest {
 		Configure::write('Cache.check', $_back['check']);
 		Configure::write('Cache.disable', $_back['disable']);
 	}
+
 /**
  * testSaveWithCounterCache method
  *
@@ -373,6 +403,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $TestModel->findById(2);
 		$this->assertIdentical($result['Syfile']['item_count'], '0');
 	}
+
 /**
  * Tests that counter caches are updated when records are added
  *
@@ -384,6 +415,7 @@ class ModelWriteTest extends BaseModelTest {
 		$User = new CounterCacheUser();
 		$Post = new CounterCachePost();
 		$data = array('Post' => array(
+			'id' => 22,
 			'title' => 'New Post',
 			'user_id' => 66
 		));
@@ -398,6 +430,7 @@ class ModelWriteTest extends BaseModelTest {
 		$expected = 3;
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * Tests that counter caches are updated when records are deleted
  *
@@ -409,7 +442,7 @@ class ModelWriteTest extends BaseModelTest {
 		$User = new CounterCacheUser();
 		$Post = new CounterCachePost();
 
-		$Post->del(2);
+		$Post->delete(2);
 		$user = $User->find('first', array(
 			'conditions' => array('id' => 66),
 			'recursive' => -1
@@ -419,6 +452,7 @@ class ModelWriteTest extends BaseModelTest {
 		$expected = 1;
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * Tests that counter caches are updated when foreign keys of counted records change
  *
@@ -441,6 +475,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEqual($users[0]['User']['post_count'], 1);
 		$this->assertEqual($users[1]['User']['post_count'], 2);
 	}
+
 /**
  * Test counter cache with models that use a non-standard (i.e. not using 'id')
  * as their primary key.
@@ -448,14 +483,14 @@ class ModelWriteTest extends BaseModelTest {
  * @access public
  * @return void
  */
-    function testCounterCacheWithNonstandardPrimaryKey() {
-        $this->loadFixtures(
+	function testCounterCacheWithNonstandardPrimaryKey() {
+		$this->loadFixtures(
 			'CounterCacheUserNonstandardPrimaryKey',
 			'CounterCachePostNonstandardPrimaryKey'
 		);
 
-        $User = new CounterCacheUserNonstandardPrimaryKey();
-        $Post = new CounterCachePostNonstandardPrimaryKey();
+		$User = new CounterCacheUserNonstandardPrimaryKey();
+		$Post = new CounterCachePostNonstandardPrimaryKey();
 
 		$data = $Post->find('first', array(
 			'conditions' => array('pid' => 1),
@@ -467,7 +502,7 @@ class ModelWriteTest extends BaseModelTest {
 		$users = $User->find('all',array('order' => 'User.uid'));
 		$this->assertEqual($users[0]['User']['post_count'], 1);
 		$this->assertEqual($users[1]['User']['post_count'], 2);
-    }
+	}
 
 /**
  * test Counter Cache With Self Joining table
@@ -497,6 +532,7 @@ class ModelWriteTest extends BaseModelTest {
 		$expected = array_fill(0, 1, 1);
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testSaveWithCounterCacheScope method
  *
@@ -536,423 +572,42 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $TestModel->findById(1);
 		$this->assertIdentical($result['Syfile']['item_count'], '1');
 	}
+
 /**
- * testValidatesBackwards method
+ * test that beforeValidate returning false can abort saves.
  *
- * @access public
  * @return void
  */
-	function testValidatesBackwards() {
-		$TestModel =& new TestValidate();
+	function testBeforeValidateSaveAbortion() {
+		$Model =& new CallbackPostTestModel();
+		$Model->beforeValidateReturn = false;
 
-		$TestModel->validate = array(
-			'user_id' => VALID_NUMBER,
-			'title' => VALID_NOT_EMPTY,
-			'body' => VALID_NOT_EMPTY
+		$data = array(
+			'title' => 'new article',
+			'body' => 'this is some text.'
 		);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => '',
-			'body' => ''
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
+		$Model->create();
+		$result = $Model->save($data);
 		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 'title',
-			'body' => ''
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '',
-			'title' => 'title',
-			'body' => 'body'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => 'not a number',
-			'title' => 'title',
-			'body' => 'body'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 'title',
-			'body' => 'body'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
 	}
 /**
- * testValidates method
+ * test that beforeSave returning false can abort saves.
  *
- * @access public
  * @return void
  */
-	function testValidates() {
-		$TestModel =& new TestValidate();
+	function testBeforeSaveSaveAbortion() {
+		$Model =& new CallbackPostTestModel();
+		$Model->beforeSaveReturn = false;
 
-		$TestModel->validate = array(
-			'user_id' => 'numeric',
-			'title' => array('allowEmpty' => false, 'rule' => 'notEmpty'),
-			'body' => 'notEmpty'
+		$data = array(
+			'title' => 'new article',
+			'body' => 'this is some text.'
 		);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => '',
-			'body' => 'body'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
+		$Model->create();
+		$result = $Model->save($data);
 		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 'title',
-			'body' => 'body'
-		));
-		$result = $TestModel->create($data) && $TestModel->validates();
-		$this->assertTrue($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => '0',
-			'body' => 'body'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 0,
-			'body' => 'body'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$TestModel->validate['modified'] = array('allowEmpty' => true, 'rule' => 'date');
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 0,
-			'body' => 'body',
-			'modified' => ''
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 0,
-			'body' => 'body',
-			'modified' => '2007-05-01'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 0,
-			'body' => 'body',
-			'modified' => 'invalid-date-here'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 0,
-			'body' => 'body',
-			'modified' => 0
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 0,
-			'body' => 'body',
-			'modified' => '0'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$TestModel->validate['modified'] = array('allowEmpty' => false, 'rule' => 'date');
-
-		$data = array('TestValidate' => array('modified' => null));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array('modified' => false));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array('modified' => ''));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'modified' => '2007-05-01'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$TestModel->validate['slug'] = array('allowEmpty' => false, 'rule' => array('maxLength', 45));
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 0,
-			'body' => 'body',
-			'slug' => ''
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 0,
-			'body' => 'body',
-			'slug' => 'slug-right-here'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$data = array('TestValidate' => array(
-			'user_id' => '1',
-			'title' => 0,
-			'body' => 'body',
-			'slug' => 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$TestModel->validate = array(
-			'number' => array(
-				'rule' => 'validateNumber',
-				'min' => 3,
-				'max' => 5
-			),
-			'title' => array(
-				'allowEmpty' => false,
-				'rule' => 'notEmpty'
-		));
-
-		$data = array('TestValidate' => array(
-			'title' => 'title',
-			'number' => '0'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'title' => 'title',
-			'number' => 0
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'title' => 'title',
-			'number' => '3'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$data = array('TestValidate' => array(
-			'title' => 'title',
-			'number' => 3
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$TestModel->validate = array(
-			'number' => array(
-				'rule' => 'validateNumber',
-				'min' => 5,
-				'max' => 10
-			),
-			'title' => array(
-				'allowEmpty' => false,
-				'rule' => 'notEmpty'
-		));
-
-		$data = array('TestValidate' => array(
-			'title' => 'title',
-			'number' => '3'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'title' => 'title',
-			'number' => 3
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$TestModel->validate = array(
-			'title' => array(
-				'allowEmpty' => false,
-				'rule' => 'validateTitle'
-		));
-
-		$data = array('TestValidate' => array('title' => ''));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array('title' => 'new title'));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array('title' => 'title-new'));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$TestModel->validate = array('title' => array(
-			'allowEmpty' => true,
-			'rule' => 'validateTitle'
-		));
-		$data = array('TestValidate' => array('title' => ''));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$TestModel->validate = array(
-			'title' => array(
-				'length' => array(
-					'allowEmpty' => true,
-					'rule' => array('maxLength', 10)
-		)));
-		$data = array('TestValidate' => array('title' => ''));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$TestModel->validate = array(
-			'title' => array(
-				'rule' => array('userDefined', 'Article', 'titleDuplicate')
-		));
-		$data = array('TestValidate' => array('title' => 'My Article Title'));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-
-		$data = array('TestValidate' => array(
-			'title' => 'My Article With a Different Title'
-		));
-		$result = $TestModel->create($data);
-		$this->assertTrue($result);
-		$result = $TestModel->validates();
-		$this->assertTrue($result);
-
-		$TestModel->validate = array(
-			'title' => array(
-				'tooShort' => array('rule' => array('minLength', 50)),
-				'onlyLetters' => array('rule' => '/^[a-z]+$/i')
-			),
-		);
-		$data = array('TestValidate' => array(
-			'title' => 'I am a short string'
-		));
-		$TestModel->create($data);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-		$result = $TestModel->validationErrors;
-		$expected = array(
-			'title' => 'onlyLetters'
-		);
-		$this->assertEqual($result, $expected);
-
-		$TestModel->validate = array(
-			'title' => array(
-				'tooShort' => array(
-					'rule' => array('minLength', 50),
-					'last' => true
-				),
-				'onlyLetters' => array('rule' => '/^[a-z]+$/i')
-			),
-		);
-		$data = array('TestValidate' => array(
-			'title' => 'I am a short string'
-		));
-		$TestModel->create($data);
-		$result = $TestModel->validates();
-		$this->assertFalse($result);
-		$result = $TestModel->validationErrors;
-		$expected = array(
-			'title' => 'tooShort'
-		);
-		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testSaveField method
  *
@@ -1021,6 +676,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $Node->read();
 		$this->assertEqual(Set::extract('/ParentNode/name', $result), array('Second'));
 	}
+
 /**
  * testSaveWithCreate method
  *
@@ -1242,6 +898,31 @@ class ModelWriteTest extends BaseModelTest {
 
 		$this->assertEqual($result, $expected);
 	}
+
+/**
+ * test that a null Id doesn't cause errors
+ *
+ * @return void
+ */
+	function testSaveWithNullId() {
+		$this->loadFixtures('User');
+		$User =& new User();
+		$User->read(null, 1);
+		$User->data['User']['id'] = null;
+		$this->assertTrue($User->save(array('password' => 'test')));
+		$this->assertTrue($User->id > 0);
+
+		$result = $User->read(null, 2);
+		$User->data['User']['id'] = null;
+		$this->assertTrue($User->save(array('password' => 'test')));
+		$this->assertTrue($User->id > 0);
+
+		$User->data['User'] = array('password' => 'something');
+		$this->assertTrue($User->save());
+		$result = $User->read();
+		$this->assertEqual($User->data['User']['password'], 'something');
+	}
+
 /**
  * testSaveWithSet method
  *
@@ -1369,6 +1050,7 @@ class ModelWriteTest extends BaseModelTest {
 		);
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testSaveWithNonExistentFields method
  *
@@ -1420,6 +1102,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $TestModel->read(array('id', 'user_id', 'title', 'body', 'published'), 5);
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testSaveFromXml method
  *
@@ -1437,6 +1120,7 @@ class ModelWriteTest extends BaseModelTest {
 		$results = $Article->find(array('Article.title' => 'test xml'));
 		$this->assertTrue($results);
 	}
+
 /**
  * testSaveHabtm method
  *
@@ -1902,12 +1586,12 @@ class ModelWriteTest extends BaseModelTest {
 		);
 		$TestModel->save($data);
 		$result = $TestModel->read(null, 1);
-		$time = date('Y-M-D H:i:s');
 		$expected = array(4, 5);
 		$this->assertEqual(Set::extract('/JoinC/JoinAsJoinC/id', $result), $expected);
 		$expected = array('new record', 'new record');
 		$this->assertEqual(Set::extract('/JoinC/JoinAsJoinC/other', $result), $expected);
 	}
+
 /**
  * testSaveHabtmCustomKeys method
  *
@@ -1929,7 +1613,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $Story->save();
 		$this->assertTrue($result);
 
-		$result = $Story->find('all');
+		$result = $Story->find('all', array('order' => array('Story.story')));
 		$expected = array(
 			array(
 				'Story' => array(
@@ -1957,6 +1641,55 @@ class ModelWriteTest extends BaseModelTest {
 				'Tag' => array()
 		));
 		$this->assertEqual($result, $expected);
+	}
+
+/**
+ * test that saving habtm records respects conditions set in the 'conditions' key
+ * for the association.
+ *
+ * @return void
+ */
+	function testHabtmSaveWithConditionsInAssociation() {
+		$this->loadFixtures('JoinThing', 'Something', 'SomethingElse');
+		$Something =& new Something();
+		$Something->unbindModel(array('hasAndBelongsToMany' => array('SomethingElse')), false);
+
+		$Something->bindModel(array(
+			'hasAndBelongsToMany' => array(
+				'DoomedSomethingElse' => array(
+					'className' => 'SomethingElse',
+					'joinTable' => 'join_things',
+					'conditions' => 'JoinThing.doomed = true',
+					'unique' => true
+				),
+				'NotDoomedSomethingElse' => array(
+					'className' => 'SomethingElse',
+					'joinTable' => 'join_things',
+					'conditions' => array('JoinThing.doomed' => 0),
+					'unique' => true
+				)
+			)
+		), false);
+		$result = $Something->read(null, 1);
+		$this->assertTrue(empty($result['NotDoomedSomethingElse']));
+		$this->assertEqual(count($result['DoomedSomethingElse']), 1);
+
+		$data = array(
+			'Something' => array('id' => 1),
+			'NotDoomedSomethingElse' => array(
+				'NotDoomedSomethingElse' => array(
+					array('something_else_id' => 2, 'doomed' => 0),
+					array('something_else_id' => 3, 'doomed' => 0)
+				)
+			)
+		);
+		$Something->create($data);
+		$result = $Something->save();
+		$this->assertTrue($result);
+
+		$result = $Something->read(null, 1);
+		$this->assertEqual(count($result['NotDoomedSomethingElse']), 2);
+		$this->assertEqual(count($result['DoomedSomethingElse']), 1);
 	}
 /**
  * testHabtmSaveKeyResolution method
@@ -2047,6 +1780,7 @@ class ModelWriteTest extends BaseModelTest {
 		));
 		$this->assertEqual($result['Monkey'], $expected);
 	}
+
 /**
  * testCreationOfEmptyRecord method
  *
@@ -2066,6 +1800,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertTrue(isset($result['Author']['updated']));
 		$this->assertEqual($TestModel->find('count'), 1);
 	}
+
 /**
  * testCreateWithPKFiltering method
  *
@@ -2162,6 +1897,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEqual($result, $expected);
 		$this->assertFalse($TestModel->id);
 	}
+
 /**
  * testCreationWithMultipleData method
  *
@@ -2333,6 +2069,7 @@ class ModelWriteTest extends BaseModelTest {
 	))));
 
 	}
+
 /**
  * testCreationWithMultipleDataSameModel method
  *
@@ -2391,6 +2128,7 @@ class ModelWriteTest extends BaseModelTest {
 				'title' => 'Brand New Article'
 		))));
 	}
+
 /**
  * testCreationWithMultipleDataSameModelManualInstances method
  *
@@ -2429,6 +2167,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $Primary->find('count');
 		$this->assertEqual($result, 2);
 	}
+
 /**
  * testRecordExists method
  *
@@ -2449,9 +2188,14 @@ class ModelWriteTest extends BaseModelTest {
 
 		$TestModel =& new TheVoid();
 		$this->assertFalse($TestModel->exists());
+
 		$TestModel->id = 5;
+		$this->expectError();
+		ob_start();
 		$this->assertFalse($TestModel->exists());
+		$output = ob_get_clean();
 	}
+
 /**
  * testUpdateExisting method
  *
@@ -2499,6 +2243,28 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $Comment->save($data);
 		$this->assertTrue($result);
 	}
+
+/**
+ * test updating records and saving blank values.
+ *
+ * @return void
+ */
+	function testUpdateSavingBlankValues() {
+		$this->loadFixtures('Article');
+		$Article =& new Article();
+		$Article->validate = array();
+		$Article->create();
+		$result = $Article->save(array(
+			'id' => 1,
+			'title' => '',
+			'body' => ''
+		));
+		$this->assertTrue($result);
+		$result = $Article->find('first', array('conditions' => array('Article.id' => 1)));
+		$this->assertEqual('', $result['Article']['title'], 'Title is not blank');
+		$this->assertEqual('', $result['Article']['body'], 'Body is not blank');
+	}
+
 /**
  * testUpdateMultiple method
  *
@@ -2532,6 +2298,7 @@ class ModelWriteTest extends BaseModelTest {
 		$expected = array_fill(0, 2, 'Updated today');
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testHabtmUuidWithUuidId method
  *
@@ -2551,11 +2318,12 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEqual(1, count($result['Uuiditem']));
 		$this->assertEqual(strlen($result['Uuiditem'][0]['UuiditemsUuidportfolio']['id']), 36);
 	}
+
 /**
  * test HABTM saving when join table has no primary key and only 2 columns.
  *
  * @return void
- **/
+ */
 	function testHabtmSavingWithNoPrimaryKeyUuidJoinTable() {
 		$this->loadFixtures('UuidTag', 'Fruit', 'FruitsUuidTag');
 		$Fruit =& new Fruit();
@@ -2574,11 +2342,12 @@ class ModelWriteTest extends BaseModelTest {
 		);
 		$this->assertTrue($Fruit->save($data));
 	}
+
 /**
  * test HABTM saving when join table has no primary key and only 2 columns, no with model is used.
  *
  * @return void
- **/
+ */
 	function testHabtmSavingWithNoPrimaryKeyUuidJoinTableNoWith() {
 		$this->loadFixtures('UuidTag', 'Fruit', 'FruitsUuidTag');
 		$Fruit =& new FruitNoWith();
@@ -2616,6 +2385,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $TestModel->read(null, $id);
 		$this->assertEqual(1, count($result['Uuidportfolio']));
 	}
+
 /**
  * testSaveMultipleHabtm method
  *
@@ -2734,6 +2504,7 @@ class ModelWriteTest extends BaseModelTest {
 
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testSaveAll method
  *
@@ -2873,6 +2644,7 @@ class ModelWriteTest extends BaseModelTest {
 		);
 		$this->assertEqual($result[6]['Attachment'], $expected);
 	}
+
 /**
  * Test SaveAll with Habtm relations
  *
@@ -2902,8 +2674,9 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEqual(count($result['Tag']), 2);
 		$this->assertEqual($result['Tag'][0]['tag'], 'tag1');
 		$this->assertEqual(count($result['Comment']), 1);
-		$this->assertEqual(count($result['Comment'][0]['comment']['Article comment']), 1);
+		$this->assertEqual(count($result['Comment'][0]['comment']), 1);
 	}
+
 /**
  * Test SaveAll with Habtm relations and extra join table fields
  *
@@ -2947,6 +2720,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertTrue(Set::matches('/SomethingElse[id=3]/JoinThing[something_else_id=3]', $result));
 		$this->assertTrue(Set::matches('/SomethingElse[id=3]/JoinThing[doomed=1]', $result));
 	}
+
 /**
  * testSaveAllHasOne method
  *
@@ -2985,7 +2759,21 @@ class ModelWriteTest extends BaseModelTest {
 				'attachment' => 'some_file.zip'
 		)));
 		$this->assertEqual($result, $expected);
+
+
+		$model->Attachment->bindModel(array('belongsTo' => array('Comment')), false);
+		$data = array(
+			'Comment' => array(
+				'comment' => 'Comment with attachment',
+				'article_id' => 1,
+				'user_id' => 1
+			),
+			'Attachment' => array(
+				'attachment' => 'some_file.zip'
+		));
+		$this->assertTrue($model->saveAll($data, array('validate' => 'first')));
 	}
+
 /**
  * testSaveAllBelongsTo method
  *
@@ -3025,6 +2813,7 @@ class ModelWriteTest extends BaseModelTest {
 		)));
 		$this->assertEqual($result, $expected);
 	}
+
 /**
  * testSaveAllHasOneValidation method
  *
@@ -3041,7 +2830,7 @@ class ModelWriteTest extends BaseModelTest {
 
 		$model->validate = array('comment' => 'notEmpty');
 		$model->Attachment->validate = array('attachment' => 'notEmpty');
-		$model->Attachment->bind('Comment');
+		$model->Attachment->bindModel(array('belongsTo' => array('Comment')));
 
 		$this->assertFalse($model->saveAll(
 			array(
@@ -3071,6 +2860,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEqual($model->validationErrors, $expected['Comment']);
 		$this->assertEqual($model->Attachment->validationErrors, $expected['Attachment']);
 	}
+
 /**
  * testSaveAllAtomic method
  *
@@ -3125,7 +2915,8 @@ class ModelWriteTest extends BaseModelTest {
 				'title' => '',
 				'body' => 'Trying to get away with an empty title'
 			)
-		), array('atomic' => false));
+		), array('validate' => true, 'atomic' => false));
+
 		$this->assertIdentical($result, array(true, false));
 
 		$result = $TestModel->saveAll(array(
@@ -3141,9 +2932,10 @@ class ModelWriteTest extends BaseModelTest {
 					'published' => 'Y',
 					'user_id' => 2
 			))
-		), array('atomic' => false));
+		), array('validate' => true, 'atomic' => false));
 		$this->assertIdentical($result, array('Article' => true, 'Comment' => array(true, true)));
 	}
+
 /**
  * testSaveAllHasMany method
  *
@@ -3220,6 +3012,7 @@ class ModelWriteTest extends BaseModelTest {
 		);
 		$this->assertEqual(Set::extract($result['Comment'], '{n}.comment'), $expected);
 	}
+
 /**
  * testSaveAllHasManyValidation method
  *
@@ -3237,7 +3030,7 @@ class ModelWriteTest extends BaseModelTest {
 			'Comment' => array(
 				array('comment' => '', 'published' => 'Y', 'user_id' => 1),
 			)
-		));
+		), array('validate' => true));
 		$expected = array('Comment' => array(false));
 		$this->assertEqual($result, $expected);
 
@@ -3258,8 +3051,92 @@ class ModelWriteTest extends BaseModelTest {
 					'published' => 'Y',
 					'user_id' => 1
 			))
-		), array('validate' => 'only'));
+		), array('validate' => 'first'));
+		$this->assertFalse($result);
 	}
+
+/**
+ * test saveAll with transactions and ensure there is no missing rollback.
+ *
+ * @return void
+ */
+	function testSaveAllManyRowsTransactionNoRollback() {
+		$this->loadFixtures('Post');
+
+		Mock::generate('DboSource', 'MockTransactionDboSource');
+		$db = ConnectionManager::create('mock_transaction', array(
+			'datasource' => 'MockTransactionDbo',
+		));
+		$db->expectOnce('rollback');
+
+		$Post =& new Post();
+		$Post->useDbConfig = 'mock_transaction';
+
+		$Post->validate = array(
+			'title' => array('rule' => array('notEmpty'))
+		);
+
+		$data = array(
+			array('author_id' => 1, 'title' => 'New Fourth Post'),
+			array('author_id' => 1, 'title' => '')
+		);
+		$Post->saveAll($data, array('atomic' => true));
+	}
+
+/**
+ * test saveAll with transactions and ensure there is no missing rollback.
+ *
+ * @return void
+ */
+	function testSaveAllAssociatedTransactionNoRollback() {
+		$testDb = ConnectionManager::getDataSource('test_suite');
+
+		Mock::generate('DboSource', 'MockTransactionAssociatedDboSource');
+		$db = ConnectionManager::create('mock_transaction_assoc', array(
+			'datasource' => 'MockTransactionAssociatedDbo',
+		));
+		$db->columns = $testDb->columns;
+
+		$db->expectOnce('rollback');
+
+		$Post =& new Post();
+		$Post->useDbConfig = 'mock_transaction_assoc';
+		$Post->Author->useDbConfig = 'mock_transaction_assoc';
+
+		$Post->Author->validate = array(
+			'user' => array('rule' => array('notEmpty'))
+		);
+
+		$data = array(
+			'Post' => array(
+				'title' => 'New post',
+				'body' => 'Content',
+				'published' => 'Y'
+			),
+			'Author' => array(
+				'user' => '',
+				'password' => "sekret"
+			)
+		);
+		$Post->saveAll($data);
+	}
+
+/**
+ * test saveAll with nested saveAll call.
+ *
+ * @return void
+ */
+	function testSaveAllNestedSaveAll() {
+		$this->loadFixtures('Sample');
+		$TransactionTestModel =& new TransactionTestModel();
+
+		$data = array(
+			array('apple_id' => 1, 'name' => 'sample5'),
+		);
+
+		$this->assertTrue($TransactionTestModel->saveAll($data, array('atomic' => true)));
+	}
+
 /**
  * testSaveAllTransaction method
  *
@@ -3569,7 +3446,7 @@ class ModelWriteTest extends BaseModelTest {
 				'title' => '',
 				'body' => 'Trying to get away with an empty title'
 		));
-		$result = $TestModel->saveAll($data, array('atomic' => false));
+		$result = $TestModel->saveAll($data, array('validate' => true, 'atomic' => false));
 		$this->assertEqual($result, array(true, false));
 		$result = $TestModel->find('all', array('recursive' => -1, 'order' => 'Post.id ASC'));
 		$errors = array(1 => array('title' => 'This field cannot be left blank'));
@@ -3649,6 +3526,7 @@ class ModelWriteTest extends BaseModelTest {
 
 		$TestModel->validate['body'] = 'notEmpty';
 	}
+
 /**
  * testSaveAllValidationOnly method
  *
@@ -3701,6 +3579,7 @@ class ModelWriteTest extends BaseModelTest {
 		);
 		$this->assertEqual($TestModel->validationErrors, $expected);
 	}
+
 /**
  * testSaveAllValidateFirst method
  *
@@ -3779,6 +3658,66 @@ class ModelWriteTest extends BaseModelTest {
 		);
 		$this->assertEqual($result[0]['Comment'][0]['comment'], 'Only new comment');
 	}
+
+/**
+ * test saveAll()'s return is correct when using atomic = false and validate = first.
+ *
+ * @return void
+ */
+	function testSaveAllValidateFirstAtomicFalse() {
+		$Something =& new Something();
+		$invalidData = array(
+			array(
+				'title' => 'foo',
+				'body' => 'bar',
+				'published' => 'baz',
+			),
+			array(
+				'body' => 3,
+				'published' =>'sd',
+			),
+		);
+		$Something->create();
+		$Something->validate = array(
+			'title' => array(
+				'rule' => 'alphaNumeric',
+				'required' => true,
+			),
+			'body' => array(
+				'rule' => 'alphaNumeric',
+				'required' => true,
+				'allowEmpty' => true,
+			),
+		);
+		$result = $Something->saveAll($invalidData, array(
+			'atomic' => false,
+			'validate' => 'first',
+		));
+		$expected = array(true, false);
+		$this->assertEqual($result, $expected);
+
+		$Something =& new Something();
+		$validData = array(
+			array(
+				'title' => 'title value',
+				'body' => 'body value',
+				'published' => 'baz',
+			),
+			array(
+				'title' => 'valid',
+				'body' => 'this body',
+				'published' =>'sd',
+			),
+		);
+		$Something->create();
+		$result = $Something->saveAll($validData, array(
+			'atomic' => false,
+			'validate' => 'first',
+		));
+		$expected = array(true, true);
+		$this->assertEqual($result, $expected);
+	}
+
 /**
  * testUpdateWithCalculation method
  *
@@ -3788,6 +3727,7 @@ class ModelWriteTest extends BaseModelTest {
 	function testUpdateWithCalculation() {
 		$this->loadFixtures('DataTest');
 		$model =& new DataTest();
+		$model->deleteAll(true);
 		$result = $model->saveAll(array(
 			array('count' => 5, 'float' => 1.1),
 			array('count' => 3, 'float' => 1.2),
@@ -3807,6 +3747,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = Set::extract('/DataTest/count', $model->find('all', array('fields' => 'count')));
 		$this->assertEqual($result, array(6, 4, 5, 2));
 	}
+
 /**
  * testSaveAllHasManyValidationOnly method
  *
@@ -3883,6 +3824,7 @@ class ModelWriteTest extends BaseModelTest {
 		);
 		$this->assertEqual($TestModel->Comment->validationErrors, $expected);
 	}
+
 /**
  * TestFindAllWithoutForeignKey
  *
@@ -3896,111 +3838,133 @@ class ModelWriteTest extends BaseModelTest {
 
 		$conditions = array('Group.name' => 'group one');
 
-        $ProductUpdateAll->bindModel(array(
+		$ProductUpdateAll->bindModel(array(
 			'belongsTo' => array(
 				'Group' => array('className' => 'GroupUpdateAll')
 			)
 		));
 
-        $ProductUpdateAll->belongsTo = array(
+		$ProductUpdateAll->belongsTo = array(
 			'Group' => array('className' => 'GroupUpdateAll', 'foreignKey' => 'group_id')
 		);
 
-        $results = $ProductUpdateAll->find('all', compact('conditions'));
+		$results = $ProductUpdateAll->find('all', compact('conditions'));
 		$this->assertTrue(!empty($results));
 
-        $ProductUpdateAll->bindModel(array('belongsTo'=>array('Group')));
-        $ProductUpdateAll->belongsTo = array(
-            'Group' => array(
+		$ProductUpdateAll->bindModel(array('belongsTo'=>array('Group')));
+		$ProductUpdateAll->belongsTo = array(
+			'Group' => array(
 				'className' => 'GroupUpdateAll',
 				'foreignKey' => false,
 				'conditions' => 'ProductUpdateAll.groupcode = Group.code'
 			));
 
-        $resultsFkFalse = $ProductUpdateAll->find('all', compact('conditions'));
-        $this->assertTrue(!empty($resultsFkFalse));
-        $expected = array(
-            '0' => array(
-                'ProductUpdateAll' => array(
-                    'id'  => 1,
-                    'name'  => 'product one',
-                    'groupcode'  => 120,
-                    'group_id'  => 1),
-                'Group' => array(
-                    'id' => 1,
-                    'name' => 'group one',
-                    'code' => 120)
-                ),
-            '1' => array(
-                'ProductUpdateAll' => array(
-                    'id'  => 2,
-                    'name'  => 'product two',
-                    'groupcode'  => 120,
-                    'group_id'  => 1),
-                'Group' => array(
-                    'id' => 1,
-                    'name' => 'group one',
-                    'code' => 120)
-                )
+		$resultsFkFalse = $ProductUpdateAll->find('all', compact('conditions'));
+		$this->assertTrue(!empty($resultsFkFalse));
+		$expected = array(
+			'0' => array(
+				'ProductUpdateAll' => array(
+					'id'  => 1,
+					'name'	=> 'product one',
+					'groupcode'	 => 120,
+					'group_id'	=> 1),
+				'Group' => array(
+					'id' => 1,
+					'name' => 'group one',
+					'code' => 120)
+				),
+			'1' => array(
+				'ProductUpdateAll' => array(
+					'id'  => 2,
+					'name'	=> 'product two',
+					'groupcode'	 => 120,
+					'group_id'	=> 1),
+				'Group' => array(
+					'id' => 1,
+					'name' => 'group one',
+					'code' => 120)
+				)
 
-            );
-        $this->assertEqual($results, $expected);
-        $this->assertEqual($resultsFkFalse, $expected);
-    }
+			);
+		$this->assertEqual($results, $expected);
+		$this->assertEqual($resultsFkFalse, $expected);
+	}
+
 /**
- * testProductUpdateAllWithForeignKey
+ * test updateAll with empty values.
+ *
+ * @return void
+ */
+	function testUpdateAllEmptyValues() {
+		$this->loadFixtures('Author', 'Post');
+		$model = new Author();
+		$result = $model->updateAll(array('user' => '""'));
+		$this->assertTrue($result);
+	}
+
+/**
+ * testUpdateAllWithJoins
  *
  * @link http://code.cakephp.org/tickets/view/69
  * @access public
  * @return void
  */
-    function testProductUpdateAll() {
+	function testUpdateAllWithJoins() {
+		$this->skipIf(
+			$this->db->config['driver'] == 'postgres',
+			'%s Currently, there is no way of doing joins in an update statement in postgresql'
+		);
 		$this->loadFixtures('ProductUpdateAll', 'GroupUpdateAll');
 		$ProductUpdateAll =& new ProductUpdateAll();
 
 		$conditions = array('Group.name' => 'group one');
 
-        $ProductUpdateAll->bindModel(array('belongsTo' => array(
+		$ProductUpdateAll->bindModel(array('belongsTo' => array(
 			'Group' => array('className' => 'GroupUpdateAll')))
 		);
 
-        $ProductUpdateAll->updateAll(array('name' => "'new product'"), $conditions);
-        $results = $ProductUpdateAll->find('all', array(
+		$ProductUpdateAll->updateAll(array('name' => "'new product'"), $conditions);
+		$results = $ProductUpdateAll->find('all', array(
 			'conditions' => array('ProductUpdateAll.name' => 'new product')
 		));
-        $expected = array(
-            '0' => array(
-                'ProductUpdateAll' => array(
-                    'id'  => 1,
-                    'name'  => 'new product',
-                    'groupcode'  => 120,
-                    'group_id'  => 1),
-                'Group' => array(
-                    'id' => 1,
-                    'name' => 'group one',
-                    'code' => 120)
-                ),
-            '1' => array(
-                'ProductUpdateAll' => array(
-                    'id'  => 2,
-                    'name'  => 'new product',
-                    'groupcode'  => 120,
-                    'group_id'  => 1),
-                'Group' => array(
-                    'id' => 1,
-                    'name' => 'group one',
-                    'code' => 120)));
+		$expected = array(
+			'0' => array(
+				'ProductUpdateAll' => array(
+					'id'  => 1,
+					'name'	=> 'new product',
+					'groupcode'	 => 120,
+					'group_id'	=> 1),
+				'Group' => array(
+					'id' => 1,
+					'name' => 'group one',
+					'code' => 120)
+				),
+			'1' => array(
+				'ProductUpdateAll' => array(
+					'id'  => 2,
+					'name'	=> 'new product',
+					'groupcode'	 => 120,
+					'group_id'	=> 1),
+				'Group' => array(
+					'id' => 1,
+					'name' => 'group one',
+					'code' => 120)));
 
-        $this->assertEqual($results, $expected);
-    }
+		$this->assertEqual($results, $expected);
+	}
+
 /**
- * testProductUpdateAllWithoutForeignKey
+ * testUpdateAllWithoutForeignKey
  *
  * @link http://code.cakephp.org/tickets/view/69
  * @access public
  * @return void
  */
-    function testProductUpdateAllWithoutForeignKey() {
+    function testUpdateAllWithoutForeignKey() {
+		$this->skipIf(
+			$this->db->config['driver'] == 'postgres',
+			'%s Currently, there is no way of doing joins in an update statement in postgresql'
+		);
 		$this->loadFixtures('ProductUpdateAll', 'GroupUpdateAll');
 		$ProductUpdateAll =& new ProductUpdateAll();
 
@@ -4018,33 +3982,67 @@ class ModelWriteTest extends BaseModelTest {
 			)
 		);
 
-        $ProductUpdateAll->updateAll(array('name' => "'new product'"), $conditions);
-        $resultsFkFalse = $ProductUpdateAll->find('all', array('conditions' => array('ProductUpdateAll.name'=>'new product')));
-        $expected = array(
-            '0' => array(
-                'ProductUpdateAll' => array(
-                    'id'  => 1,
-                    'name'  => 'new product',
-                    'groupcode'  => 120,
-                    'group_id'  => 1),
-                'Group' => array(
-                    'id' => 1,
-                    'name' => 'group one',
-                    'code' => 120)
-                ),
-            '1' => array(
-                'ProductUpdateAll' => array(
-                    'id'  => 2,
-                    'name'  => 'new product',
-                    'groupcode'  => 120,
-                    'group_id'  => 1),
-                'Group' => array(
-                    'id' => 1,
-                    'name' => 'group one',
-                    'code' => 120)));
-        $this->assertEqual($resultsFkFalse, $expected);
-    }
+		$ProductUpdateAll->updateAll(array('name' => "'new product'"), $conditions);
+		$resultsFkFalse = $ProductUpdateAll->find('all', array('conditions' => array('ProductUpdateAll.name'=>'new product')));
+		$expected = array(
+			'0' => array(
+				'ProductUpdateAll' => array(
+					'id'  => 1,
+					'name'	=> 'new product',
+					'groupcode'	 => 120,
+					'group_id'	=> 1),
+				'Group' => array(
+					'id' => 1,
+					'name' => 'group one',
+					'code' => 120)
+				),
+			'1' => array(
+				'ProductUpdateAll' => array(
+					'id'  => 2,
+					'name'	=> 'new product',
+					'groupcode'	 => 120,
+					'group_id'	=> 1),
+				'Group' => array(
+					'id' => 1,
+					'name' => 'group one',
+					'code' => 120)));
+		$this->assertEqual($resultsFkFalse, $expected);
+	}
+
+/**
+ * test that saveAll behaves like plain save() when suplied empty data
+ *
+ * @link http://cakephp.lighthouseapp.com/projects/42648/tickets/277-test-saveall-with-validation-returns-incorrect-boolean-when-saving-empty-data
+ * @access public
+ * @return void
+ */
+	function testSaveAllEmptyData() {
+		$this->loadFixtures('Article', 'ProductUpdateAll');
+		$model =& new Article();
+		$result = $model->saveAll(array(), array('validate' => 'first'));
+		$this->assertTrue($result);
+
+		$model =& new ProductUpdateAll();
+		$result = $model->saveAll(array());
+		$this->assertFalse($result);
+	}
+
+/**
+ * test writing floats in german locale.
+ *
+ * @return void
+ */
+	function testWriteFloatAsGerman() {
+		$restore = setlocale(LC_ALL, null);
+		setlocale(LC_ALL, 'de_DE');
+
+		$model = new DataTest();
+		$result = $model->save(array(
+			'count' => 1,
+			'float' => 3.14593
+		));
+		$this->assertTrue($result);
+		setlocale(LC_ALL, $restore);
+	}
 
 }
-
-?>

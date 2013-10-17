@@ -26,7 +26,7 @@
 	<ul>
 		<?php
 			foreach ($profiles as $profile)
-				echo "<li>" . $html->link($profile['id_text'], array('controller' => 'profiles', 'action'=>'view', $profile['id'])) . " [ " . $html->link($html->image('delete.png'), array('action' => "delete", $host['Host']['id'], $profile['id']), array('title' => 'Delete this association'), null, false, false) . " ]</li>";
+				echo "<li>" . $html->link($profile['id_text'], array('controller' => 'profiles', 'action'=>'view', $profile['id'])) . " [ " . $html->link($html->image('delete.png'), array('action' => "delete", $host['Host']['id'], $profile['id']), array('title' => 'Delete this association', 'escape' => false), null, false, false) . " ]</li>";
 		?>
 	</ul>
 <?php endif; ?>

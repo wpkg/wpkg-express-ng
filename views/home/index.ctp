@@ -21,14 +21,14 @@
  */
 ?>
 <?php
-$javascript->link('jquery.js', false);
-$javascript->link('pretty.js', false);
+$html->script('jquery.js', false);
+$html->script('pretty.js', false);
 $js = '$(document).ready(function(){
 			$(".date").each(function(){ this.title = this.innerHTML; }).prettyDate();
 			setInterval(function(){ $(".date").prettyDate(); }, 5000);
 	   });
 ';
-$javascript->codeBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
 ?>
 <div id="stats-container">
 
