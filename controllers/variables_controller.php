@@ -122,7 +122,7 @@ class VariablesController extends AppController {
 		if (!ctype_digit($id))
 			$this->_showCritError('Invalid id for Variable');
 		$var = $this->Variable->find('first', array('conditions' => array('Variable.id' => $id), 'fields' => array('Variable.ref_type', 'Variable.ref_id')));
-		if ($var && $this->Variable->del($id)) {
+		if ($var && $this->Variable->delete($id)) {
 			if (($type = constValToLCSingle('VARIABLE_TYPE_', $var['Variable']['ref_type'])) === null) {
 				$this->Session->setFlash("The Variable could not be deleted");
 				return;

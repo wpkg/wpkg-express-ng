@@ -19,16 +19,8 @@
  * along with wpkgExpress.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
-<?php
-$html->script('jquery.js', false);
-$html->script('pretty.js', false);
-$js = '$(document).ready(function(){
-			$(".date").each(function(){ this.title = this.innerHTML; }).prettyDate();
-			setInterval(function(){ $(".date").prettyDate(); }, 5000);
-	   });
-';
-$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+echo $html->script(array('jquery.js', 'pretty.js', 'wpkgexpress_ng.js'));
+
 ?>
 <div id="stats-container">
 

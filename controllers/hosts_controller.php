@@ -154,7 +154,7 @@ class HostsController extends AppController {
 	function delete($type = null, $id = null) {
 		if ($type != null && $id == null && ctype_digit($type) && $type > 0) {
 			// deleting a host: $type = host id
-			if ($this->Host->del($type)) {
+			if ($this->Host->delete($type)) {
 				$this->Session->setFlash('Host deleted');
 				if ($this->RequestHandler->isAjax()) {
 					$this->autoRender = true;

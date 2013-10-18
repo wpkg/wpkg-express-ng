@@ -19,79 +19,10 @@
  * along with wpkgExpress.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
-<?php
 if (!$isAjax) {
-	$html->script('jquery.js', false);
-	$html->script('jquery_json.js', false);
-	$html->script('pretty.js', false);
-	$html->script('dateformat.js', false);
-	$js = ' var interval;
-			var params = "";
-			function prettyDates() {
-				$(".date").each(function(){ this.title = this.innerHTML; }).prettyDate();
-				clearInterval(interval);
-				interval = setInterval(function(){ $(".date").prettyDate(); }, 5000);
-			}
-			function updatePagingLinks() {
-				$(".paging a").click(function(){ params=this.href.substr(this.href.indexOf("/page:")); $("#content").load(this.href, function() {update();}); return false; });
-				$("th a").click(function(){ params=this.href.substr(this.href.indexOf("/page:")); $("#content").load(this.href, function() {update();}); return false; });
-		    }
-			function updateOtherLinks() {
-				$("a[href*=\"enable\"], a[href*=\"disable\"]").click(function() {
-					$.ajax({
-						domobj: this,
-						url: this.href,
-						cache: false,
-						success: function(data, textStatus) {
-							data = $.secureEvalJSON(data);
-							if (data.success) {
-								if ($(this.domobj).html() == "Yes") {
-									$(this.domobj).attr("href", this.domobj.href.replace("disable", "enable"));
-									$(this.domobj).html("No");
-									$(this.domobj).parent().parent().attr("class", "disabled");
-								} else {
-									this.domobj.href = this.domobj.href.replace("enable", "disable");
-									$(this.domobj).html("Yes");
-									$(this.domobj).parent().parent().removeAttr("class");
-								}
-								var now = new Date();
-								$(this.domobj).parent().parent().children().eq(4).children().eq(0).attr("title", now.format("Y-m-d h:i:s A"));
-								if ($("#flashMessage").length > 0)
-									$("#flashMessage").remove();
-							} else {
-								if ($("#flashMessage").length == 0)
-									$("#content h2:first").before("<div id=\"flashMessage\" class=\"message\"></div>");
-								$("#flashMessage").html(data.message);
-							}
-						}
-					});
-					return false;
-				});
-				$("a[alt=\"Delete\"]").click(function() {
-					var type = $("#content h2").text();
-					type = type.substr(0, type.indexOf(" ")-1);
-					if (confirm("Are you sure you wish to delete the " + type + " \"" + $(this).parent().parent().children().eq(2).children().eq(0).html() + "\"?")) {
-						$("#content").load(this.href + params, function() {update();});
-					}
-					return false;
-				});
-				$("#content a[href*=\"/move\"]").click(function() {
-					$("#content").load(this.href + params, function() {update();});
-					return false;
-				});
-			}
-			function update() {
-				prettyDates();
-				updatePagingLinks();
-				updateOtherLinks();
-			}
-			$(document).ready(function(){
-				update();
-			});
-	';
-	$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+	echo $html->script(array('jquery.js', 'jquery_json.js', 'pretty.js', 'dateformat.js', 'wpkgexpress_ng.js'));
 }	
+
 ?>
 <h2>Hosts - [ <?php echo $html->image('add.png', array('alt' => 'Add', 'url' => array('action' => 'add'))) ?> ]</h2><hr class="hbar" />
 

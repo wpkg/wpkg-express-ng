@@ -20,9 +20,9 @@ function addThisPage($title = null, $act = null , $level = null)    // add the c
     }
 
     if ($act == 'reset' )    { // add this argument if it comes from menu.
-        $this->controller->Session->del('crumb_links') ;
-        $this->controller->Session->del('crumb_titles') ;
-        $this->controller->Session->del('crumb_levels') ;
+        $this->controller->Session->delete('crumb_links') ;
+        $this->controller->Session->delete('crumb_titles') ;
+        $this->controller->Session->delete('crumb_levels') ;
     }
     if ( !isset($_SESSION['crumb_links'])) {
         $_SESSION['crumb_links'] = array() ;

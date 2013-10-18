@@ -24,5 +24,5 @@
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 ?>
-<?php if ($session->check('Message.flash')) $session->flash(); ?>
+<?php if ($session->check('Message.flash')) echo $session->flash(); ?>
 <?php echo $content_for_layout; ?>

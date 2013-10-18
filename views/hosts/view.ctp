@@ -19,29 +19,8 @@
  * along with wpkgExpress.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
-<?php
-$html->script('jquery.js', false);
-$html->script('pretty.js', false);
-$js = '
-		var interval;
-		function prettyDates() {
-			$(".date").each(function(){ this.title = this.innerHTML; }).prettyDate();
-			clearInterval(interval);
-			interval = setInterval(function(){ $(".date").prettyDate(); }, 5000);
-		}
-		function updateProfiles() {
-			$("#profiles a[href*=\"delete\"]").click(function() {
-				$("#profiles").load(this.href, function() {updateProfiles();});
-				return false;
-			});
-		}
-		$(document).ready(function(){
-			prettyDates();
-			updateProfiles();
-		});
-';
-$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+echo $html->script(array('jquery.js', 'pretty.js', 'wpkgexpress_ng.js'));
+
 ?>
 <style type="text/css">label {width: 114px;}</style>
 <h2>Host Details for '<?php echo $host['Host']['name']; ?>' - [ <?php echo $html->image('pencil.png', array('alt' => 'Edit', 'url' => array('action' => 'edit', $host['Host']['id']))) . "&nbsp;" . $html->link($html->image('delete.png'), array('action'=>'delete', $host['Host']['id']), array('alt' => 'Delete', 'escape' => false), sprintf("Are you sure you want to delete Host '%s'?", addcslashes($host['Host']['name'], '"')), false) . "&nbsp;" . $html->image('var.png', array('alt' => 'Variables', 'url' => array('controller' => 'variables', 'action' => 'view', 'host', $host['Host']['id']))) ?> ]</h2><hr class="hbar" />

@@ -19,48 +19,7 @@
  * along with wpkgExpress.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
-<?php
-$html->script('jquery.js', false);
-$html->script('pretty.js', false);
-$js = ' 
-		var interval;
-		function updateChecks() {
-			$("#checks a[href*=\"move\"]").click(function() {
-				$("#checks").load(this.href, function() {updateChecks();});
-				return false;
-			});
-			$("#checks a[href*=\"delete\"]").click(function() {
-				if ($(this).parent().clone().children().remove().end().text().indexOf("Logical") == 0) {
-					if (!confirm("Are you sure you wish to delete this package check?\nAny children of this logical check will also be removed."))
-						return false;
-				}
-				$("#checks").load(this.href, function() {updateChecks();});
-				return false;
-			});
-		}
-		function updateActions() {
-			$("#actions a[href*=\"move\"]").click(function() {
-				$("#actions").load(this.href, function() {updateActions();});
-				return false;
-			});
-			$("#actions a[href*=\"delete\"]").click(function() {
-				$("#actions").load(this.href, function() {updateActions();});
-				return false;
-			});
-		}
-		function prettyDates() {
-			$(".date").each(function(){ this.title = this.innerHTML; }).prettyDate();
-			clearInterval(interval);
-			interval = setInterval(function(){ $(".date").prettyDate(); }, 5000);
-		}
-		$(document).ready(function(){
-			prettyDates();
-			updateChecks();
-			updateActions();
-	    });
-';
-$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+echo $html->script(array('jquery.js', 'pretty.js', 'wpkgexpress_ng.js'));
 
 $execute = ucwords(constValToLCSingle("package_execute", $package['Package']['execute']));
 $reboot = ucwords(constValToLCSingle("package_reboot", $package['Package']['reboot']));

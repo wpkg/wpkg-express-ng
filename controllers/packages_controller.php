@@ -381,24 +381,24 @@ class PackagesController extends AppController {
 			case "check":
 				$this->Package->PackageCheck->id = $id;
 				$pkgId = $this->Package->PackageCheck->field('package_id');
-				$success = $this->Package->PackageCheck->del($id);
+				$success = $this->Package->PackageCheck->delete($id);
 				break;
 			case "action":
 				$this->Package->PackageAction->id = $id;
 				$pkgId = $this->Package->PackageAction->field('package_id');
-				$success = $this->Package->PackageAction->del($id);
+				$success = $this->Package->PackageAction->delete($id);
 				break;
 			case "exitcode":
 				$this->Package->PackageAction->ExitCode->id = $id;
 				$pkgActId = $this->Package->PackageAction->ExitCode->field('package_action_id');
-				$success = $this->Package->PackageAction->ExitCode->del($id);
+				$success = $this->Package->PackageAction->ExitCode->delete($id);
 				break;
 			case "package":
 				// For now, enforce dependencies. Later on we may want to prompt the user for the
 				// desired course of action.
 				$dependsOnThisPkg = $this->Package->getDependedOnBy($id);
 				if ($dependsOnThisPkg === false || empty($dependsOnThisPkg))
-					$success = $this->Package->del($id);
+					$success = $this->Package->delete($id);
 				else {
 					$success = false;
 					$message = "It is depended on by: " . $this->element('RecordInUseByLinks', array('records' => $dependsOnThisPkg));

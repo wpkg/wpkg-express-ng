@@ -19,21 +19,8 @@
  * along with wpkgExpress.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
-<?php
-$html->script('jquery.js', false);
-$js = ' 
-		function updateExitCodes() {
-			$("#exitcodes a[href*=\"delete\"]").click(function() {
-				$("#exitcodes").load(this.href, function() {updateExitCodes();});
-				return false;
-			});
-		}
-		$(document).ready(function(){
-			updateExitCodes();
-	    });
-';
-$html->scriptBlock($js, array('allowCache' => false, 'safe' => false, 'inline' => false));
+echo $html->script(array('jquery.js', 'pretty.js', 'wpkgexpress_ng.js'));
+
 ?>
 <style type="text/css">label {width: 80px;}</style>
 <h2>Package Action Details for '<?php echo $html->link($packageAction['Package']['name'], array('controller'=>'packages', 'action'=>'view', $packageAction['Package']['id'])); ?>' - [ <?php echo $html->image('pencil.png', array('alt' => 'Edit', 'url' => array('action' => 'edit', 'action', $packageAction['PackageAction']['id']))) . "&nbsp;" . $html->link($html->image('delete.png'), array('action'=>'delete', 'action', $packageAction['PackageAction']['id']), array('alt' => 'Delete', 'escape' => false), "Are you sure you wish to delete this package action and all associated exit codes?", false); ?> ]</h2><hr class="hbar" />

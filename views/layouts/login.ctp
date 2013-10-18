@@ -44,7 +44,7 @@
 <div id="siteBox">
 
   <div id="content">
-    <?php if ($session->check('Message.flash')) { $session->flash(); echo "<br />"; } ?>
+    <?php if ($session->check('Message.flash')) { echo $session->flash(); echo "<br />"; } ?>
     <?php echo $content_for_layout; ?>
   </div>
 

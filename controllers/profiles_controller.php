@@ -155,7 +155,7 @@ class ProfilesController extends AppController {
 			// deleting a profile: $type = profile id
 			$id = $type;
 			if (($msg = $this->_canDisable($id)) === true) {
-				if ($this->Profile->del($type)) {
+				if ($this->Profile->delete($type)) {
 					$this->Session->setFlash('Profile deleted.');
 					$redirect = true;
 				} else
