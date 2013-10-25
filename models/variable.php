@@ -44,7 +44,8 @@ class Variable extends AppModel {
 	function refExists($data) {
 		$field = array_shift(array_keys($data));
 		$typeName = constValToLCSingle('VARIABLE_TYPE_', $this->data['Variable']['ref_type'], false, false, false);
-		return ($typeName != null && ClassRegistry::init(ucwords($typeName))->find('count', array('conditions' => array(strtolower($typeName) . '.id' => $data[$field]))) > 0);
+		//return ($typeName != null && ClassRegistry::init(ucwords($typeName))->find('count', array('conditions' => array(strtolower($typeName) . '.id' => $data[$field]))) > 0);
+		return ($typeName != null && ClassRegistry::init(ucwords($typeName))->find('count', array('conditions' => array($typeName . '.id' => $data[$field]))) > 0);
 	}
 
 	function getAllFor($type, $recordId) {

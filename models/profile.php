@@ -19,8 +19,6 @@
  * along with wpkgExpress.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
-<?php
 include_once('../wpkg_constants.php');
 
 class Profile extends AppModel {

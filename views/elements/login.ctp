@@ -22,7 +22,7 @@
 ?>
 <?php
 echo $html->script('jquery.js');
-echo $html->scriptBlock('$(document).ready(function(){ $("input:visible:enabled:first").focus(); })', array('allowCache' => false, 'safe' => false, 'inline' => false));
+echo $html->scriptBlock('$(document).ready(function(){ $("input:visible:enabled:first").focus(); })', array('allowCache' => false, 'safe' => false));
 
 echo $form->create($dest, $url);
 echo "<fieldset><legend>wpkgExpress Login</legend>";
