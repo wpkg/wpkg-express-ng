@@ -20,7 +20,7 @@
  *
  */
 ?>
-<style type="text/css">label {80px;}</style>
+<style type="text/css">label {width: 80px;}</style>
 <h2>Adding Exit Code to '<?php echo $html->link($pkgActType, array('controller'=>'packages', 'action'=>'view', 'action', $pkgActId), array('title'=>$pkgActCmd)); ?>' Package Action</h2><hr class="hbar" />
 <?php echo $form->create("ExitCode", array("url" => "/packages/add/exitcode/$pkgActId")); ?>
 <div class="inputwrap"><label for="ExitCodeCode" title="<?php echo TOOLTIP_EXITCODE_CODE; ?>"><span class="required">*</span>Code:</label><?php echo $form->input('code', array('label' => false, 'class'=>'input', 'div' => false, 'size' => 8)) ?></div>

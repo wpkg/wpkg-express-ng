@@ -7,13 +7,13 @@ function updateChecks() {
       	return false;
     });
     $("#checks a[href*=\"delete\"]").click(function() {
-        if ($(this).parent().clone().children().remove().end().text().indexOf("Logical") == 0) {
+        if ($(this).parent().clone().children().remove().end().text().indexOf("Logical") === 0) {
             if (!confirm("Are you sure you wish to delete this package check?\nAny children of this logical check will also be removed."))
-				return false;
-            }
-            $("#checks").load(this.href, function() {updateChecks();});
-            return false;
-        });
+		return false;
+        }
+        $("#checks").load(this.href, function() {updateChecks();});
+        return false;
+    });
 }
 function updateActions() {
     $("#actions a[href*=\"move\"]").click(function() {
