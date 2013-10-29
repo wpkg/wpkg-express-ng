@@ -50,7 +50,7 @@ class VariablesController extends AppController {
 		if (!ctype_digit($recordId) || !ctype_alpha($type) || ($model =& ClassRegistry::init(strtolower($type))) == false)
 			$this->_showCritError('Invalid type and/or record id');
 		else {
-			$type = ucwords(strtolower($type));
+			$type = strtolower(ucwords($type));
 			if (!empty($this->data)) {
 				if (($type_id = constant('VARIABLE_TYPE_' . strtoupper($type))) === false)
 					$type_id = -1; // Will cause validation to fail, since we only use positive integers
@@ -59,7 +59,7 @@ class VariablesController extends AppController {
 				$this->data['Variable']['ref_type'] = $type_id;
 				if ($this->Variable->save($this->data)) {
 					$this->Session->setFlash('The Variable has been saved');
-					$this->redirect(array('action'=>'view', $type, $recordId));
+					$this->redirect(array('action'=>'view', strtolower($type), $recordId));
 					//$this->redirect(array('controller' => Inflector::pluralize(strtolower($type)), 'action'=>'view', $recordId));
 				} else {
 					$this->Session->setFlash('The Variable could not be saved');

@@ -30,7 +30,7 @@
 /*
  *
  * Using the Schema command line utility
- * cake schema run create DbAcl
+ * cake schema create DbAcl
  *
  */
 class DbAclSchema extends CakeSchema {

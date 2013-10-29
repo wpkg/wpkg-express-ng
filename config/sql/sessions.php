@@ -30,7 +30,7 @@
 /*
  *
  * Using the Schema command line utility
- * cake schema run create Sessions
+ * cake schema create Sessions
  *
  */
 class SessionsSchema extends CakeSchema {

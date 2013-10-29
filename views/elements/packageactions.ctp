@@ -19,8 +19,7 @@
  * along with wpkgExpress.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
-<?php if (!$packageActions || count($packageActions) == 0): ?>
+if (!$packageActions || count($packageActions) == 0): ?>
 	&lt;None&gt;
 <?php else: ?>
 	<table cellpadding="0" cellspacing="0">

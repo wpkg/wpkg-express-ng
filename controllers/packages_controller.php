@@ -30,7 +30,7 @@ class PackagesController extends AppController {
 	var $name = 'Packages';
 	var $layout = 'main';
 	var $components = array('Session', 'RequestHandler');
-	var $helpers = array('Html', 'Form', 'Navigate', 'Javascript', 'Number', 'Xmlpp');
+	var $helpers = array('Html', 'Form', 'Navigate', 'Javascript', 'Number', 'Xmlpp', 'Tree');
 	var $paginate = array('limit' => 25,
 			      'page' => 1,
 			      'fields' => array(

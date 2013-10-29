@@ -30,7 +30,7 @@
 /*
  *
  * Using the Schema command line utility
- * cake schema run create i18n
+ * cake schema create i18n
  *
  */
 class i18nSchema extends CakeSchema {
