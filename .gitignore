@@ -5,3 +5,4 @@ tmp/logs/*
 tmp/sessions/*
 config/database.php
 config/wpkgExpress.php
+!empty
