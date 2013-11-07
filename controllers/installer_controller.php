@@ -209,7 +209,7 @@ class InstallerController extends AppController {
 
 	function thanks() {
 		if (!file_exists(APP . '/do_not_remove'))
-			file_put_contents(APP . '/do_not_remove', 'Hi mom!');
+			file_put_contents(APP . '/do_not_remove', 'Remove me for fresh install');
 	}
 
 	function __getDBConfig() {

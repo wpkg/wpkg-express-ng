@@ -140,8 +140,11 @@ class AppController extends Controller {
 		} else if (is_array($params) && isset($params[0]['className']) && $params[0]['className'] == 'ConnectionManager' && !file_exists(APP . "do_not_remove")) {
 			$this->redirect(array('controller' => 'installer'));
 			return;
-		}
-		//$this->redirect("/");
+		} else if (!file_exists(APP . "do_not_remove")) {
+            $this->redirect(array('controller' => 'installer'));
+            return;
+        }
+
 		echo "<h3>Unrecoverable error:</h3><br />Error details dump:<br />\$method = ";
 		var_dump($method);
 		echo "<br />\$params = ";
