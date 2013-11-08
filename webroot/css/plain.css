@@ -57,7 +57,7 @@
     #headerLeft {
       padding-top: 12px;
       font-size: 2.0em;
-      text-align: left;
+      text-align: center;
       float: left;
       width: 170px; /*29%;*/
       height: 43px;
@@ -267,7 +267,6 @@
     }
 
     .small {
-      margin-left: 20px;
       color: #666666;
       font-size: 7pt;
     }

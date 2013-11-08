@@ -29,9 +29,9 @@
   <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
   <meta name="author" content="Brian White" />
   <meta name="description" content="Web-based graphical frontend to the open source project wpkg software deployment management system" />
-  <meta name="keywords" content="wpkg, wpkg express, wpgkexpress, wpkg frontend, open source" />
+  <meta name="keywords" content="wpkg, wpkg express, wpgkexpress, wpkgexpress-ng, wpkg frontend, open source" />
 
-  <title>wpkgExpress :: Login</title>
+  <title>wpkgExpress-ng :: Login</title>
 
   <?php echo $html->css('plain'); ?>
   <?php echo $html->css('installer'); ?>

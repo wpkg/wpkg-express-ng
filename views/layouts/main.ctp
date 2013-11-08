@@ -31,7 +31,7 @@
   <meta name="description" content="Web-based graphical frontend to the open source project wpkg software deployment management system" />
   <meta name="keywords" content="wpkg, wpkg express, wpkgexpress, wpkg frontend, open source" />
 
-  <title>wpkgExpress :: <?php echo $title_for_layout; ?></title>
+  <title>wpkgExpress-ng :: <?php echo $title_for_layout; ?></title>
 
   <?php echo $html->css('plain'); ?>
   <!--[if IE 6]>
@@ -49,8 +49,8 @@
   <!-- Header box starts: page title and top link bar -->
   <div id="headerBox">
     <div id="headerLeft">
-      <?php echo $html->link('wpkgExpress', '/', array('title'=>'Return to main summary page')); ?>
-      <div class="small">- A web-based frontend to <?php echo $html->link('WPKG', 'http://www.wpkg.org', array('title'=>'Official home for the WPKG software deployment management system')); ?></div>
+      <?php echo $html->link('wpkgExpress-ng', '/', array('title'=>'Return to main summary page')); ?>
+      <div class="small">A web-based frontend to <?php echo $html->link('WPKG', 'http://www.wpkg.org', array('title'=>'Official home for the WPKG software deployment management system')); ?></div>
     </div>
     <div id="headerRight">
 	  <div style="float: right">
@@ -83,7 +83,7 @@
     <div id="footerLeft"></div>
 
     <div id="footerRight">
-		Copyright &copy; 2009 Brian White | UI based on a design by fullahead.org
+		Copyright &copy; 2013 <?php echo $html->link('Probesys', 'http://www.probesys.com', array('title'=>'Probesys - Open Source specialist')); ?> - Based on Brian White's wpkgExpress | UI based on a design by fullahead.org
     </div>
 
   </div>

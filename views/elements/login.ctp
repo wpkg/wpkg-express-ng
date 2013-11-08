@@ -25,7 +25,7 @@ echo $html->script('jquery.js');
 echo $html->scriptBlock('$(document).ready(function(){ $("input:visible:enabled:first").focus(); })', array('allowCache' => false, 'safe' => false));
 
 echo $form->create($dest, $url);
-echo "<fieldset><legend>wpkgExpress Login</legend>";
+echo "<fieldset><legend>wpkgExpress-ng Login</legend>";
 if (!empty($criticalerrors)) {
 	echo "<ul class=\"criticalerrors\">";
 	foreach ($criticalerrors as $err)

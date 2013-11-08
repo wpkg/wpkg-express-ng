@@ -1,3 +1,61 @@
+wpkgExpress-ng © 2013 Probesys
+
+======
+v1.0.0
+======
+
+Fixes / Enhancements :
+======================
+
+	- Updated CakePhp framework to v1.3.17
+
+	- Updated jQuery to v1.10.2
+
+	- Fix issue #33 https://code.google.com/p/wpkgexpress/issues/detail?id=33
+		Update package importing error / warning msg
+
+	- Fix issue #36 https://code.google.com/p/wpkgexpress/issues/detail?id=36
+		Fix profiles.xml import error
+
+	- Fix issue #40 https://code.google.com/p/wpkgexpress/issues/detail?id=40
+		Changed dropdown selector to checkboxes
+
+	- Fix issue #41 https://code.google.com/p/wpkgexpress/issues/detail?id=41
+		Dirty patch integrated for conditionnal checks xml generation
+
+	- Fix issue #42 https://code.google.com/p/wpkgexpress/issues/detail?id=42
+		Fix exit codes error at xml generation
+
+	- Fix issue #45 https://code.google.com/p/wpkgexpress/issues/detail?id=45
+		Row highlighting in table data -  patch integrated
+
+	- Fix issue #52 https://code.google.com/p/wpkgexpress/issues/detail?id=52
+		Exit code 'any' not converted to integer anymore
+
+	- Fix issue #59 https://code.google.com/p/wpkgexpress/issues/detail?id=59
+		Add index on enabled field in hosts table
+
+	- Fix issue #60 https://code.google.com/p/wpkgexpress/issues/detail?id=60
+		Allow variables in revision field - patch integrated
+
+	- First time run now redirects to installer page
+
+	- Added Host type (Hostname / OS / Architecture / Environnement conditions) for Package checks
+
+	- Added version comparison conditions for Package checks' Uninstall type
+
+TODO
+====
+
+	- Fix host varible error (due to table alias generation)
+	- Add package chaining
+	- Add hosts extended attributes (http://wpkg.org/Extended_host_attribute_matching)
+	- ...
+
+======================================================================================	
+
+wpkgExpress © 2009 Brian White
+
 v1.0-r12
 ========
 Fixes:	- When importing, Profiles and dependent Packages that are associated with Packages that are upgraded, lose those associations after Package upgrade
