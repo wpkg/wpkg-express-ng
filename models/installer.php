@@ -276,7 +276,6 @@ class Installer extends AppModel {
                 $cfg = preg_replace("/Configure::write\('Security\.cipherSeed', '(.*?)'\);/", "Configure::write('Security.cipherSeed', '$cipher');", $cfg);
                 if (file_put_contents(CONFIGS . 'core.php', $cfg) !== false)
                     return true;
-                }
             }
         }
         return false;
