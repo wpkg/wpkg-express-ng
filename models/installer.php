@@ -271,7 +271,8 @@ class Installer extends AppModel {
         if (($cfg = file_get_contents(CONFIGS . 'core.php')) !== false) {
             preg_match("/Configure::write\('Security\.cipherSeed', '(.*?)'\);/", $cfg, $matches);
             if (empty($matches[1])) {
-                $cipher = sha1(uniqid(mt_rand(), true));
+				//Generate a 30 numeric chars string
+				$cipher = crc32(uniqid(mt_rand(), true)) . crc32(uniqid(mt_rand(), true)) . crc32(uniqid(mt_rand(), true));
                 $cfg = preg_replace("/Configure::write\('Security\.cipherSeed', '(.*?)'\);/", "Configure::write('Security.cipherSeed', '$cipher');", $cfg);
                 if (file_put_contents(CONFIGS . 'core.php', $cfg) !== false)
                     return true;
