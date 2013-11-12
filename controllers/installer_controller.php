@@ -99,6 +99,10 @@ class InstallerController extends AppController {
 			$this->Configuration->write('General.salted', true);
 			$this->Installer->writeSalt();
 		}
+		if ($this->Configuration->read('General.ciphered') === null || $this->Configuration->read('General.ciphered') == false) {
+            $this->Configuration->write('General.ciphered', true);
+            $this->Installer->writeCipher();
+        }
 
 		$dbconf = $this->__getDBConfig();
 		if (empty($dbconf) || empty($dbconf['default'])) {

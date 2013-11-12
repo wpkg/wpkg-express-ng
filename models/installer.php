@@ -254,19 +254,6 @@ class Installer extends AppModel {
 	}
 
 	function writeSalt() {
-		/*if ($fh = fopen(CONFIGS . 'core.php', 'r')) {
-			$cfg = '';
-			while (!feof($fh))
-				$cfg .= fgets($fh, 4096);
-			fclose($fh);
-			$salt = sha1(uniqid(mt_rand(), true));
-			$cfg = preg_replace("/Configure::write\('Security\.salt', '(.*?)'\);/", "Configure::write('Security.salt', '$salt');", $cfg);
-			$fh = fopen(CONFIGS . 'core.php', 'w');
-			fwrite($fh, $cfg);
-			fclose($fh);
-			return true;
-		}
-		return false;*/
 		if (($cfg = file_get_contents(CONFIGS . 'core.php')) !== false) {
 			preg_match("/Configure::write\('Security\.salt', '(.*?)'\);/", $cfg, $matches);
 			// only insert a new salt if there currently is no salt
@@ -279,6 +266,20 @@ class Installer extends AppModel {
 		}
 		return false;
 	}
+
+	function writeCipher() {
+        if (($cfg = file_get_contents(CONFIGS . 'core.php')) !== false) {
+            preg_match("/Configure::write\('Security\.cipherSeed', '(.*?)'\);/", $cfg, $matches);
+            if (empty($matches[1])) {
+                $cipher = sha1(uniqid(mt_rand(), true));
+                $cfg = preg_replace("/Configure::write\('Security\.cipherSeed', '(.*?)'\);/", "Configure::write('Security.cipherSeed', '$cipher');", $cfg);
+                if (file_put_contents(CONFIGS . 'core.php', $cfg) !== false)
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 	function getDBDrivers() {
 		$drivers = array();
