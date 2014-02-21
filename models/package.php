@@ -299,13 +299,13 @@ class Package extends AppModel {
 
 		$conditions = ($getDisabled ? array() : array('Package.enabled' => true));
 		$fields = array('Package.enabled',
-				'Package.name',
-				'Package.revision',
-				'Package.priority',
-				'Package.execute',
-				'Package.notify',
-				'Package.id_text',
-				'Package.reboot'
+						'Package.name',
+						'Package.revision',
+						'Package.priority',
+						'Package.execute',
+						'Package.notify',
+						'Package.id_text',
+						'Package.reboot'
 		);
 		$order = array('Package.priority' => 'desc', 'Package.name' => 'asc');
 		$contain = array('PackageAction', 'PackageAction.ExitCode', 'Variable', 'PackageCheck', 'PackageCheck.Childcheck', 'PackageCheck.Parentcheck', 'PackageDependency');

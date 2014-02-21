@@ -43,7 +43,7 @@ if (isset($host['Profile'])) {
 }
 $outXML .= ($exportdisabled && $host['Host']['enabled'] == false ? "<!--" . ($formatxml ? "\n" : " ") : "") . $xml->elem('host', $host_attribs, $XML_Variables . $XML_Profiles, true) . ($exportdisabled && $host['Host']['enabled'] == false ? ($formatxml ? "\n" : " ") . "-->" . ($formatxml ? "\n" : "") : "");
 
-if (!$exportdisabled && $profile['Profile']['enabled'] == false)
+if (!$exportdisabled && $host['Host']['enabled'] == false)
 	echo "";
 else
 	echo ($formatxml ? "\n" . $xmlpp->indent($outXML) : $outXML);

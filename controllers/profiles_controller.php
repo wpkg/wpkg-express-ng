@@ -25,6 +25,7 @@ include_once('../wpkg_constants.php');
 App::import('Sanitize');
 
 class ProfilesController extends AppController {
+
 	var $name = 'Profiles';
 	var $layout = 'main';
 	var $components = array('Session', 'RequestHandler');
@@ -58,7 +59,7 @@ class ProfilesController extends AppController {
 				if ($this->RequestHandler->isXml()) {
 					$this->set('formatxml', $this->Configuration->read('XMLFeed.formatxml'));
 					$this->set('exportdisabled', $exportdisabled = $this->Configuration->read('XMLFeed.exportdisabled'));
-					$profile = $this->Profile->getAllForXML(null, $exportdisabled);
+					$profile = $this->Profile->getAllForXML($id, $exportdisabled);
 				}
 				$this->set(compact('profile'));
 				return;

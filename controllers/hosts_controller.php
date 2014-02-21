@@ -63,7 +63,7 @@ class HostsController extends AppController {
 				if ($this->RequestHandler->isXml()) {
 					$this->set('formatxml', $this->Configuration->read('XMLFeed.formatxml'));
 					$this->set('exportdisabled', $exportdisabled = $this->Configuration->read('XMLFeed.exportdisabled'));
-					$host = $this->Host->getAllForXML(null, $exportdisabled);
+					$host = $this->Host->getAllForXML($id, $exportdisabled);
 				}
 				$this->set(compact('host'));
 				return;

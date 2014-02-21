@@ -21,6 +21,7 @@
  */
 ?>
 <?php
+
 // Use a PHP error handler to do easy validation of Host name regex validation
 $hasRegexError = false;
 function regexErrorHandler($errno, $errstr, $errfile, $errline) {
@@ -30,7 +31,8 @@ function regexErrorHandler($errno, $errstr, $errfile, $errline) {
 
 class Host extends AppModel {
 
-	var $name = 'Host';
+	var $alias = 'Host';
+	var $name = "Host";
 	var $displayField = 'name';
 	var $actsAs = array('ExtendAssociations', 'Containable', 'Ordered' => array('field' => 'position', 'foreign_key' => false));
 	var $validate = array(
@@ -137,8 +139,8 @@ class Host extends AppModel {
 		$fields = array('Host.id', 'Host.name', 'Host.enabled', 'MainProfile.id_text');
 		$order = array('Host.position' => 'asc');
 
-		if ($id)
-			return $this->find('all', array('conditions' => array('Host.id' => $id) + $conditions, 'fields' => $fields, 'order' => $order));
+		if ($id) 
+			return $this->find('first', array('conditions' => array('Host.id' => $id) + $conditions, 'fields' => $fields, 'order' => $order));
 		else
 			return $this->find('all', array('conditions' => $conditions, 'fields' => $fields, 'order' => $order));
 	}
