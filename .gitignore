@@ -1,9 +1,8 @@
+/.idea/
 tmp/cache/models/*
 tmp/cache/persistent/*
 tmp/cache/views/*
 tmp/logs/*
 tmp/sessions/*
-config/database.php
-config/wpkgExpress.php
 do_not_remove
 !.gitkeep
