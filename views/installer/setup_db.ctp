@@ -19,24 +19,50 @@
  * along with wpkgExpress.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
-<?php
+
 echo $form->create('Installer', $url);
-echo "<fieldset><legend>Step $step of $steps - " . $this->pageTitle . "</legend>";
+echo "<fieldset><legend>Step $step of $steps - " . $this->pageTitle . '</legend>';
+
 if (!empty($criticalerrors)) {
-	echo "<ul class=\"criticalerrors\">";
-	foreach ($criticalerrors as $err)
-		echo "<li>" . $err . "</li>";
-	echo "</ul>";
+    echo '<ul class="criticalerrors">';
+    foreach ($criticalerrors as $err) {
+        echo "<li>$err</li>";
+    }
+    echo '</ul>';
 }
-echo $form->input('driver', array('label' => 'Driver: ', 'options' => $drivers, 'default' => 'mysql'));
-echo $form->input('persistent', array('label' => 'Persistent connection: ', 'options' => array(1 => 'Yes', 0 => 'No'), 'default' => 0));
-echo $form->input('database', array('label' => 'Database name: '));
-echo $form->input('host', array('label' => 'Host: ', 'default' => 'localhost'));
-echo $form->input('port', array('label' => 'Port: ', 'default' => ''));
-echo $form->input('login', array('label' => 'Login: ', 'autocomplete' => "off"));
-echo $form->input('password', array('label' => 'Password: '));
-echo "<hr />";
+
+echo $form->input('driver', array(
+    'label' => 'Driver: ',
+    'options' => $drivers,
+    'default' => getenv('DB_DRIVER')
+));
+echo $form->input('persistent', array(
+    'label' => 'Persistent connection: ',
+    'options' => array(1 => 'Yes', 0 => 'No'),
+    'default' => getenv('DB_PERSISTENT')
+));
+echo $form->input('database', array(
+    'label' => 'Database name: ',
+    'default' => getenv('DB_NAME')
+));
+echo $form->input('host', array(
+    'label' => 'Host: ',
+    'default' => getenv('DB_HOST')
+));
+echo $form->input('port', array(
+    'label' => 'Port: ',
+    'default' => getenv('DB_PORT')
+));
+echo $form->input('login', array(
+    'label' => 'Login: ',
+    'autocomplete' => 'off',
+    'default' => getenv('DB_USER')
+));
+echo $form->input('password', array(
+    'label' => 'Password: ',
+    'default' => getenv('DB_PASS')
+));
+
+echo '<hr />';
 echo $form->end($submit);
-echo "</fieldset>";
-?>
+echo '</fieldset>';
